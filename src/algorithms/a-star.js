@@ -70,7 +70,7 @@ class AStar{
                        continue
 
                     // Do not proceed if the node is not walkable
-                    if(grid[x][y] !== 0)
+                    if(this.grid[x][y] === 1)
                         continue
 
                     // Add new node to the children
@@ -102,14 +102,5 @@ class AStar{
     }
 }
 
-const grid = [
-    [0, 0, 0, 1, 0, 0],
-    [0, 0, 0, 1, 0, 0],
-    [0, 0, 0, 1, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 0, 0],
-    [0, 0, 0, 1, 0, 0]
-]
-
-let path = new AStar([1, 1], [0, 4], grid).findPath()
-console.log(path)
+// let path = new AStar([1, 1], [0, 4], grid).findPath()
+export default AStar

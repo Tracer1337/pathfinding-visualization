@@ -14,6 +14,15 @@ const Node = ({
         case STATES.BLOCKED:
             backgroundColor = COLORS.BLOCKED
             break
+        case STATES.START:
+            backgroundColor = COLORS.START
+            break
+        case STATES.END:
+            backgroundColor = COLORS.END
+            break
+        case STATES.PATH:
+            backgroundColor = COLORS.PATH
+            break
         default:
             backgroundColor = COLORS.WALKABLE
     }
