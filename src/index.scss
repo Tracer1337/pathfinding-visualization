@@ -1,0 +1,14 @@
+body{
+    margin: 0;
+
+    .grid{
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-wrap: wrap;
+
+        .node{
+            background-color: black;
+        }
+    }
+}
