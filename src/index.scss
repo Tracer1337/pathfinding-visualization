@@ -1,14 +1,16 @@
 body{
     margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 
     .grid{
-        width: 100vw;
-        height: 100vh;
         display: flex;
         flex-wrap: wrap;
 
         .node{
-            background-color: black;
+            outline: 1px solid black;
         }
     }
 }
