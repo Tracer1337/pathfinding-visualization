@@ -3,8 +3,7 @@ import {NODE_SIZE, STATES, COLORS} from "../config/constants.js"
 
 const Node = ({
     state,
-    onMouseEnter,
-    onMouseDown
+    onClick
 }) => {
     let backgroundColor
     switch(state){
@@ -30,8 +29,7 @@ const Node = ({
         <div
             className="node"
             style={{width: NODE_SIZE, height: NODE_SIZE, backgroundColor}}
-            onMouseEnter={onMouseEnter}
-            onMouseDown={onMouseDown}
+            onClick={onClick}
         />
     )
 }

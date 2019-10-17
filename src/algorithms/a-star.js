@@ -10,18 +10,26 @@ class Node{
         this.parentNode = parentNode
     }
 
-    equal(node){ return this.x == node.x && this.y == node.y }
-
-    distanceTo(node){ return ((node.x-this.x)**2+(node.y-this.y)**2)**(1/2)}
+    equal(node){ return this.x === node.x && this.y === node.y }
 }
 
 class AStar{
-    constructor(start, end, grid){
+    static heuristics = [
+        // Manhattan Distance
+        (currentNode, endNode) => Math.abs(currentNode.x-endNode.x)+Math.abs(currentNode.y-endNode.y),
+        // Diagonal Distance
+        (currentNode, endNode) => Math.max(Math.abs(currentNode.x-endNode.x),Math.abs(currentNode.y-endNode.y)),
+        // Euclidean Distance
+        (currentNode, endNode) => ((currentNode.x-endNode.x)**2+(currentNode.y-endNode.y)**2)**(1/2)
+    ]
+
+    constructor(start, end, grid, heuristic = 0){
         this.startNode = new Node(...start)
         this.endNode = new Node(...end)
         this.grid = grid
         this.openList = [this.startNode]
         this.closedList = []
+        this.heuristic = AStar.heuristics[heuristic]
     }
 
     getNodeInList(list, node){
@@ -61,12 +69,12 @@ class AStar{
             for(let x = currentNode.x - 1; x <= currentNode.x + 1; x++){
                 for(let y = currentNode.y - 1; y <= currentNode.y + 1; y++){
                     // Do not proceed if the position is the positon of the currentNode
-                    if(x == 0 && y == 0)
+                    if(x === currentNode.x && y === currentNode.y)
                         continue
 
-                    // Do not proceed it the node is not inside the grid
+                    // Do not proceed if the node is not inside the grid
                     if(x < 0 || y < 0 ||
-                       x > this.grid.length || y > this.grid[0].length)
+                       x >= this.grid.length || y >= this.grid[0].length)
                        continue
 
                     // Do not proceed if the node is not walkable
@@ -86,7 +94,7 @@ class AStar{
 
                 // Create the g, h and f values
                 child.g = currentNode.g + 1
-                child.h = child.distanceTo(this.endNode)
+                child.h = this.heuristic(child, this.endNode)
                 child.f = child.g + child.h
 
                 // Child is already in the open list
