@@ -7,6 +7,7 @@ import AStar from "../algorithms/a-star.js"
 export default class Grid extends React.Component{
     state = {grid: Array(this.props.rows).fill(0).map(() => Array(this.props.columns).fill(0))}
     mode = STATES.BLOCKED
+    nodes = []
 
     indexToCoords(index){
         return [Math.floor(index/this.props.columns), index%this.props.columns]
@@ -34,15 +35,30 @@ export default class Grid extends React.Component{
 
     calculatePath = () => {
         const newGrid = this.state.grid
-        const path = new AStar(this.indexToCoords(this.startingPoint), this.indexToCoords(this.endingPoint), this.state.grid).findPath()
-        if(path){
-            for(let point of path){
-                newGrid[point[0]][point[1]] = 4
+        const pathFinder = new AStar(this.indexToCoords(this.startingPoint), this.indexToCoords(this.endingPoint), this.state.grid)
+
+        pathFinder.setFrameRate(4)
+
+        pathFinder.addEventListener("newCurrentNode", ({detail}) => {
+            if(this.lastNode){
+                this.lastNode.unsetCurrentNode()
             }
-            this.setState({grid: newGrid})
-        }else{
-            alert("There is no path")
-        }
+            const currentNode = detail
+            const index = currentNode.x*this.props.columns+currentNode.y
+            this.nodes[index].setCurrentNode()
+            this.lastNode = this.nodes[index]
+        })
+
+        const path = pathFinder.findPath().then(path => {
+            if(path){
+                for(let point of path){
+                    newGrid[point[0]][point[1]] = 4
+                }
+                this.setState({grid: newGrid})
+            }else{
+                alert("There is no path")
+            }
+        })
     }
 
     render(){
@@ -53,6 +69,7 @@ export default class Grid extends React.Component{
                         state={state}
                         key={i}
                         onClick={() => this.handleClick(i)}
+                        ref={ref => this.nodes[i] = ref}
                     />
                 ))}
             </div>

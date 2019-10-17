@@ -15,5 +15,6 @@ export const COLORS = {
     BLOCKED: "black",
     START: "blue",
     END: "green",
-    PATH: "red"
+    PATH: "red",
+    CURRENT: "cyan"
 }

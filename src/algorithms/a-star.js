@@ -1,3 +1,6 @@
+import Emitter from "../utils/Emitter.js"
+import sleep from "../utils/sleep.js"
+
 class Node{
     constructor(x, y, parentNode = null){
         this.x = x
@@ -13,7 +16,7 @@ class Node{
     equal(node){ return this.x === node.x && this.y === node.y }
 }
 
-class AStar{
+class AStar extends Emitter{
     static heuristics = [
         // Manhattan Distance
         (currentNode, endNode) => Math.abs(currentNode.x-endNode.x)+Math.abs(currentNode.y-endNode.y),
@@ -23,17 +26,21 @@ class AStar{
         (currentNode, endNode) => ((currentNode.x-endNode.x)**2+(currentNode.y-endNode.y)**2)**(1/2)
     ]
 
+    // Allowed directions to move
     static directions = [
+        // Up, Down, Left, Right
         [
                       [0, -1],
             [-1,  0],          [1,  0],
                       [0,  1]
         ],
+        // All Directions
         [
             [-1, -1], [0, -1], [1, -1],
             [-1,  0],          [1,  0],
             [-1,  1], [0,  1], [1,  1]
         ],
+        // All Directions
         [
             [-1, -1], [0, -1], [1, -1],
             [-1,  0],          [1,  0],
@@ -42,6 +49,7 @@ class AStar{
     ]
 
     constructor(start, end, grid, heuristicNr = 0){
+        super()
         this.startNode = new Node(...start)
         this.endNode = new Node(...end)
         this.grid = grid
@@ -50,13 +58,17 @@ class AStar{
 
         this.heuristic = AStar.heuristics[heuristicNr]
         this.directions = AStar.directions[heuristicNr]
+
+        this.framerate = 1
     }
+
+    setFrameRate = framerate => this.framerate = framerate
 
     getNodeInList(list, node){
         return list.find(closedNode => closedNode.equal(node))
     }
 
-    findPath(){
+    async findPath(){
         while(this.openList.length){
             // Find the node with least f in the open list
             let currentNode = this.openList[0]
@@ -67,6 +79,8 @@ class AStar{
                     currentNodeIndex = i
                 }
             }
+
+            this.dispatchEvent(new CustomEvent("newCurrentNode", {detail: currentNode}))
 
             // Remove currentNode from the open list and add it to the closed list
             this.openList.splice(currentNodeIndex, 1)
@@ -81,7 +95,7 @@ class AStar{
                     path.push([current.x, current.y])
                     current = current.parentNode
                 }
-                return path.reverse()
+                return Promise.resolve(path.reverse())
             }
 
             // Generate currentNode's adjacent nodes and set their parents to currentNode
@@ -125,6 +139,8 @@ class AStar{
                 // Add child to the open list
                 this.openList.push(child)
             }
+
+            await sleep(1/this.framerate*1000)
         }
     }
 }
