@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react"
+import React from "react"
 
 import Node from "./Node.js"
 import {NODE_SIZE, STATES} from "../config/constants.js"

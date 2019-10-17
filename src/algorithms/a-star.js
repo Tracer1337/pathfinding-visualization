@@ -23,13 +23,33 @@ class AStar{
         (currentNode, endNode) => ((currentNode.x-endNode.x)**2+(currentNode.y-endNode.y)**2)**(1/2)
     ]
 
-    constructor(start, end, grid, heuristic = 0){
+    static directions = [
+        [
+                      [0, -1],
+            [-1,  0],          [1,  0],
+                      [0,  1]
+        ],
+        [
+            [-1, -1], [0, -1], [1, -1],
+            [-1,  0],          [1,  0],
+            [-1,  1], [0,  1], [1,  1]
+        ],
+        [
+            [-1, -1], [0, -1], [1, -1],
+            [-1,  0],          [1,  0],
+            [-1,  1], [0,  1], [1,  1]
+        ]
+    ]
+
+    constructor(start, end, grid, heuristicNr = 0){
         this.startNode = new Node(...start)
         this.endNode = new Node(...end)
         this.grid = grid
         this.openList = [this.startNode]
         this.closedList = []
-        this.heuristic = AStar.heuristics[heuristic]
+
+        this.heuristic = AStar.heuristics[heuristicNr]
+        this.directions = AStar.directions[heuristicNr]
     }
 
     getNodeInList(list, node){
@@ -66,24 +86,23 @@ class AStar{
 
             // Generate currentNode's adjacent nodes and set their parents to currentNode
             let children = []
-            for(let x = currentNode.x - 1; x <= currentNode.x + 1; x++){
-                for(let y = currentNode.y - 1; y <= currentNode.y + 1; y++){
-                    // Do not proceed if the position is the positon of the currentNode
-                    if(x === currentNode.x && y === currentNode.y)
-                        continue
+            // Check allowed nodes
+            for(let dir of this.directions){
+                // Apply dir to currentNodes position to get the new x, y
+                let x = currentNode.x+dir[0]
+                let y = currentNode.y+dir[1]
 
-                    // Do not proceed if the node is not inside the grid
-                    if(x < 0 || y < 0 ||
-                       x >= this.grid.length || y >= this.grid[0].length)
-                       continue
+                // Do not proceed if the node is not inside the grid
+                if(x < 0 || y < 0 ||
+                   x >= this.grid.length || y >= this.grid[0].length)
+                   continue
 
-                    // Do not proceed if the node is not walkable
-                    if(this.grid[x][y] === 1)
-                        continue
+                // Do not proceed if the node is not walkable
+                if(this.grid[x][y] === 1)
+                    continue
 
-                    // Add new node to the children
-                    children.push(new Node(x, y, currentNode))
-                }
+                // Add new node to the children
+                children.push(new Node(x, y, currentNode))
             }
 
             for(let child of children){
