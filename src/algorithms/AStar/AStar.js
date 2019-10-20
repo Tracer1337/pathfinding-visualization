@@ -1,5 +1,6 @@
 import Emitter from "../../utils/Emitter.js"
 import sleep from "../../utils/sleep.js"
+import {Directions} from "../../config/constants.js"
 import Node from "./Node.js"
 
 export default class AStar extends Emitter{
@@ -10,22 +11,6 @@ export default class AStar extends Emitter{
         (currentNode, endNode) => Math.max(Math.abs(currentNode.x-endNode.x),Math.abs(currentNode.y-endNode.y)),
         // Euclidean Distance
         (currentNode, endNode) => ((currentNode.x-endNode.x)**2+(currentNode.y-endNode.y)**2)**(1/2)
-    ]
-
-    // Allowed directions to move
-    static directions = [
-        // Up, Down, Left, Right
-        [
-                      [0, -1],
-            [-1,  0],          [1,  0],
-                      [0,  1]
-        ],
-        // All Directions
-        [
-            [-1, -1], [0, -1], [1, -1],
-            [-1,  0],          [1,  0],
-            [-1,  1], [0,  1], [1,  1]
-        ]
     ]
 
     constructor(start, end, grid){
@@ -42,7 +27,7 @@ export default class AStar extends Emitter{
 
     setFramerate = framerate => this.framerate = framerate
     setHeuristic = heuristicNr => this.heuristic = AStar.heuristics[heuristicNr]
-    setDirections = directionsNr => this.directions = AStar.directions[directionsNr]
+    setDirections = directionsNr => this.directions = Directions[directionsNr]
 
     getNodeInList(list, node){
         return list.find(nodeInList => nodeInList.equal(node))

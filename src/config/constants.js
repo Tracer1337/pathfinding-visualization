@@ -20,3 +20,18 @@ export const COLORS = {
     OPEN: "cyan",
     CLOSED: "grey"
 }
+
+export const Directions = [
+    // Up, Down, Left, Right
+    [
+                  [0, -1],
+        [-1,  0],          [1,  0],
+                  [0,  1]
+    ],
+    // All Directions
+    [
+        [-1, -1], [0, -1], [1, -1],
+        [-1,  0],          [1,  0],
+        [-1,  1], [0,  1], [1,  1]
+    ]
+]
