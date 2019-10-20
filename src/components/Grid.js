@@ -2,7 +2,8 @@ import React from "react"
 
 import Node from "./Node.js"
 import {NODE_SIZE, STATES} from "../config/constants.js"
-import AStar from "../algorithms/a-star.js"
+import AStar from "../algorithms/AStar/AStar.js"
+import Dijkstra from "../algorithms/Dijkstra/Dijkstra.js"
 
 export default class Grid extends React.Component{
     state = {grid: Array(this.props.rows).fill(0).map(() => Array(this.props.columns).fill(0))}
@@ -25,10 +26,10 @@ export default class Grid extends React.Component{
     }
 
     handleNextIteration = ({detail}) => {
-        const {currentNode, newOpenListNodes, newClosedListNode} = detail
+        const {newOpenListNodes, newClosedListNode} = detail
 
         // Show currentNode
-        // const currentNodeIndex = this.coordsToIndex(currentNode)
+        // const currentNodeIndex = this.coordsToIndex(detail.currentNode)
         // this.nodes[currentNodeIndex].set("CURRENT")
         // this.lastCurrentNode = this.nodes[currentNodeIndex]
 
@@ -47,11 +48,12 @@ export default class Grid extends React.Component{
 
     calculatePath = () => {
         const newGrid = this.state.grid
-        const pathFinder = new AStar(this.indexToCoords(this.startingPoint), this.indexToCoords(this.endingPoint), this.state.grid)
+        // const pathFinder = new AStar(this.indexToCoords(this.startingPoint), this.indexToCoords(this.endingPoint), this.state.grid)
+        const pathFinder = new Dijkstra(this.indexToCoords(this.startingPoint), this.state.grid)
 
-        pathFinder.setFrameRate(30)
-        pathFinder.setHeuristic(1)
-        pathFinder.setDirections(0)
+        pathFinder.setFramerate(30)
+        // pathFinder.setHeuristic(2)
+        // pathFinder.setDirections(1)
         pathFinder.addEventListener("nextIteration", this.handleNextIteration)
 
         pathFinder.findPath().then(path => {
