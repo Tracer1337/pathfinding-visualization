@@ -139,7 +139,7 @@ class AStar extends Emitter{
 
                 // Child is already in the open list
                 let nodeInOpenList = this.getNodeInList(this.openList, child)
-                if(nodeInOpenList && child.g > nodeInOpenList.g){
+                if(nodeInOpenList && child.g >= nodeInOpenList.g){
                     continue
                 }
 
