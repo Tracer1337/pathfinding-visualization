@@ -86,6 +86,11 @@ class AStar extends Emitter{
             // Remove currentNode from the open list and add it to the closed list
             this.openList.splice(currentNodeIndex, 1)
             this.closedList.push(currentNode)
+            console.log({
+                currentNode,
+                openList: JSON.parse(JSON.stringify(this.openList)),
+                closedList: JSON.parse(JSON.stringify(this.closedList))
+            })
 
             // Found the goal
             if(currentNode.equal(this.endNode)){
@@ -109,11 +114,11 @@ class AStar extends Emitter{
 
                 // Do not proceed if the node is not inside the grid
                 if(x < 0 || y < 0 ||
-                   x >= this.grid.length || y >= this.grid[0].length)
+                   x >= this.grid[0].length || y >= this.grid.length)
                    continue
 
                 // Do not proceed if the node is not walkable
-                if(this.grid[x][y] === 1)
+                if(this.grid[y][x] === 1)
                     continue
 
                 // Add new node to the children
@@ -122,7 +127,7 @@ class AStar extends Emitter{
 
             const newOpenListNodes = []
             for(let child of children){
-                // Child is already on the closed list
+                // Child is already in the closed list
                 if(this.getNodeInList(this.closedList, child)){
                     continue
                 }
@@ -151,6 +156,7 @@ class AStar extends Emitter{
             }}))
 
             await sleep(1/this.framerate*1000)
+            // await new Promise(resolve => document.addEventListener("keypress", resolve))
         }
     }
 }

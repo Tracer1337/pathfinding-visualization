@@ -35,7 +35,7 @@ export default class Node extends React.Component{
                 className="node"
                 style={{width: NODE_SIZE, height: NODE_SIZE, backgroundColor: this.state.backgroundColor || this.getBackgroundColor()}}
                 onClick={this.props.onClick}
-            />
+            >{this.props.children}</div>
         )
     }
 }

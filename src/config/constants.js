@@ -1,4 +1,4 @@
-export const NODE_SIZE = 30
+export const NODE_SIZE = 75
 
 export const GRID_PADDING = 10
 
@@ -14,7 +14,7 @@ export const COLORS = {
     WALKABLE: "white",
     BLOCKED: "black",
     START: "blue",
-    END: "black",
+    END: "green",
     PATH: "green",
     CURRENT: "yellow",
     OPEN: "cyan",

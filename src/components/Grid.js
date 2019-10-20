@@ -10,17 +10,17 @@ export default class Grid extends React.Component{
     nodes = []
 
     indexToCoords(index){
-        return [Math.floor(index/this.props.columns), index%this.props.columns]
+        return [index%this.props.columns, Math.floor(index/this.props.columns)]
     }
 
     coordsToIndex({x,y}){
-        return x*this.props.columns+y
+        return y*this.props.columns+x
     }
 
     setGridAtIndex(index, value){
         const newGrid = this.state.grid
         const coords = this.indexToCoords(index)
-        newGrid[coords[0]][coords[1]] = value
+        newGrid[coords[1]][coords[0]] = value
         this.setState({grid: newGrid})
     }
 
@@ -56,12 +56,12 @@ export default class Grid extends React.Component{
         pathFinder.setHeuristic(2)
         pathFinder.addEventListener("nextIteration", this.handleNextIteration)
 
-        const path = pathFinder.findPath().then(path => {
+        pathFinder.findPath().then(path => {
             pathFinder.removeEventListener("nextIteration", this.handleNextIteration)
             if(path){
                 // Show final path
                 for(let point of path){
-                    newGrid[point[0]][point[1]] = 4
+                    newGrid[point[1]][point[0]] = 4
                     this.nodes[this.coordsToIndex({x:point[0], y:point[1]})].set("PATH")
                 }
                 this.setState({grid: newGrid})
@@ -93,7 +93,7 @@ export default class Grid extends React.Component{
                         key={i}
                         onClick={() => this.handleClick(i)}
                         ref={ref => this.nodes[i] = ref}
-                    />
+                    >({this.indexToCoords(i).join("|")})</Node>
                 ))}
             </div>
         )
