@@ -39,12 +39,6 @@ class AStar extends Emitter{
             [-1, -1], [0, -1], [1, -1],
             [-1,  0],          [1,  0],
             [-1,  1], [0,  1], [1,  1]
-        ],
-        // All Directions
-        [
-            [-1, -1], [0, -1], [1, -1],
-            [-1,  0],          [1,  0],
-            [-1,  1], [0,  1], [1,  1]
         ]
     ]
 
@@ -57,15 +51,12 @@ class AStar extends Emitter{
         this.closedList = []
 
         this.setHeuristic(0)
-        this.framerate = 10
+        this.setDirections(0)
     }
 
     setFrameRate = framerate => this.framerate = framerate
-
-    setHeuristic = heuristicNr => {
-        this.heuristic = AStar.heuristics[heuristicNr]
-        this.directions = AStar.directions[heuristicNr]
-    }
+    setHeuristic = heuristicNr => this.heuristic = AStar.heuristics[heuristicNr]
+    setDirections = directionsNr => this.directions = AStar.directions[directionsNr]
 
     getNodeInList(list, node){
         return list.find(nodeInList => nodeInList.equal(node))
@@ -86,12 +77,7 @@ class AStar extends Emitter{
             // Remove currentNode from the open list and add it to the closed list
             this.openList.splice(currentNodeIndex, 1)
             this.closedList.push(currentNode)
-            console.log({
-                currentNode,
-                openList: JSON.parse(JSON.stringify(this.openList)),
-                closedList: JSON.parse(JSON.stringify(this.closedList))
-            })
-
+            
             // Found the goal
             if(currentNode.equal(this.endNode)){
                 // Follow the path to the starting node, beginning from the end node
@@ -155,11 +141,11 @@ class AStar extends Emitter{
                 newClosedListNode: this.closedList.length>1 && this.closedList[this.closedList.length-2]
             }}))
 
-            await sleep(1/this.framerate*1000)
-            // await new Promise(resolve => document.addEventListener("keypress", resolve))
+            if(this.framerate){
+                await sleep(1/this.framerate*1000)
+            }
         }
     }
 }
 
-// let path = new AStar([1, 1], [0, 4], grid).findPath()
 export default AStar

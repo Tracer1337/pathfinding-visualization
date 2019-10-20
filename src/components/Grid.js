@@ -24,20 +24,17 @@ export default class Grid extends React.Component{
         this.setState({grid: newGrid})
     }
 
-    handleNextIteration =  ({detail}) => {
+    handleNextIteration = ({detail}) => {
         const {currentNode, newOpenListNodes, newClosedListNode} = detail
 
         // Show currentNode
-        const currentNodeIndex = this.coordsToIndex(currentNode)
-        this.nodes[currentNodeIndex].set("CURRENT")
-        this.lastCurrentNode = this.nodes[currentNodeIndex]
+        // const currentNodeIndex = this.coordsToIndex(currentNode)
+        // this.nodes[currentNodeIndex].set("CURRENT")
+        // this.lastCurrentNode = this.nodes[currentNodeIndex]
 
         // Show new openlist nodes
         for(let openNode of newOpenListNodes){
             const openNodeIndex = this.coordsToIndex(openNode)
-            // // Exclude the current node
-            // if(openNodeIndex === currentNodeIndex)
-            //     continue
             this.nodes[openNodeIndex].set("OPEN")
         }
 
@@ -52,8 +49,9 @@ export default class Grid extends React.Component{
         const newGrid = this.state.grid
         const pathFinder = new AStar(this.indexToCoords(this.startingPoint), this.indexToCoords(this.endingPoint), this.state.grid)
 
-        pathFinder.setFrameRate(5)
-        pathFinder.setHeuristic(2)
+        pathFinder.setFrameRate(30)
+        pathFinder.setHeuristic(1)
+        pathFinder.setDirections(0)
         pathFinder.addEventListener("nextIteration", this.handleNextIteration)
 
         pathFinder.findPath().then(path => {
@@ -66,6 +64,7 @@ export default class Grid extends React.Component{
                 }
                 this.setState({grid: newGrid})
             }else{
+                // No path found
                 alert("There is no path")
             }
         })
