@@ -14,7 +14,9 @@ export const COLORS = {
     WALKABLE: "white",
     BLOCKED: "black",
     START: "blue",
-    END: "green",
-    PATH: "red",
-    CURRENT: "cyan"
+    END: "black",
+    PATH: "green",
+    CURRENT: "yellow",
+    OPEN: "cyan",
+    CLOSED: "grey"
 }

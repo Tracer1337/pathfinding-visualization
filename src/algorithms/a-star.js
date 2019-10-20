@@ -13,7 +13,7 @@ class Node{
         this.parentNode = parentNode
     }
 
-    equal(node){ return this.x === node.x && this.y === node.y }
+    equal = node => this.x === node.x && this.y === node.y
 }
 
 class AStar extends Emitter{
@@ -48,7 +48,7 @@ class AStar extends Emitter{
         ]
     ]
 
-    constructor(start, end, grid, heuristicNr = 0){
+    constructor(start, end, grid){
         super()
         this.startNode = new Node(...start)
         this.endNode = new Node(...end)
@@ -56,16 +56,19 @@ class AStar extends Emitter{
         this.openList = [this.startNode]
         this.closedList = []
 
-        this.heuristic = AStar.heuristics[heuristicNr]
-        this.directions = AStar.directions[heuristicNr]
-
-        this.framerate = 1
+        this.setHeuristic(0)
+        this.framerate = 10
     }
 
     setFrameRate = framerate => this.framerate = framerate
 
+    setHeuristic = heuristicNr => {
+        this.heuristic = AStar.heuristics[heuristicNr]
+        this.directions = AStar.directions[heuristicNr]
+    }
+
     getNodeInList(list, node){
-        return list.find(closedNode => closedNode.equal(node))
+        return list.find(nodeInList => nodeInList.equal(node))
     }
 
     async findPath(){
@@ -79,8 +82,6 @@ class AStar extends Emitter{
                     currentNodeIndex = i
                 }
             }
-
-            this.dispatchEvent(new CustomEvent("newCurrentNode", {detail: currentNode}))
 
             // Remove currentNode from the open list and add it to the closed list
             this.openList.splice(currentNodeIndex, 1)
@@ -119,6 +120,7 @@ class AStar extends Emitter{
                 children.push(new Node(x, y, currentNode))
             }
 
+            const newOpenListNodes = []
             for(let child of children){
                 // Child is already on the closed list
                 if(this.getNodeInList(this.closedList, child)){
@@ -138,7 +140,15 @@ class AStar extends Emitter{
 
                 // Add child to the open list
                 this.openList.push(child)
+                newOpenListNodes.push(child)
             }
+
+            // Visualization bridge
+            this.dispatchEvent(new CustomEvent("nextIteration", {detail: {
+                currentNode,
+                newOpenListNodes,
+                newClosedListNode: this.closedList.length>1 && this.closedList[this.closedList.length-2]
+            }}))
 
             await sleep(1/this.framerate*1000)
         }

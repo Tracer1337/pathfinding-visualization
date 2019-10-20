@@ -13,11 +13,62 @@ export default class Grid extends React.Component{
         return [Math.floor(index/this.props.columns), index%this.props.columns]
     }
 
+    coordsToIndex({x,y}){
+        return x*this.props.columns+y
+    }
+
     setGridAtIndex(index, value){
         const newGrid = this.state.grid
         const coords = this.indexToCoords(index)
         newGrid[coords[0]][coords[1]] = value
         this.setState({grid: newGrid})
+    }
+
+    handleNextIteration =  ({detail}) => {
+        const {currentNode, newOpenListNodes, newClosedListNode} = detail
+
+        // Show currentNode
+        const currentNodeIndex = this.coordsToIndex(currentNode)
+        this.nodes[currentNodeIndex].set("CURRENT")
+        this.lastCurrentNode = this.nodes[currentNodeIndex]
+
+        // Show new openlist nodes
+        for(let openNode of newOpenListNodes){
+            const openNodeIndex = this.coordsToIndex(openNode)
+            // // Exclude the current node
+            // if(openNodeIndex === currentNodeIndex)
+            //     continue
+            this.nodes[openNodeIndex].set("OPEN")
+        }
+
+        // Show new closed list node
+        if(newClosedListNode){
+            const closedNodeIndex = this.coordsToIndex(newClosedListNode)
+            this.nodes[closedNodeIndex].set("CLOSED")
+        }
+    }
+
+    calculatePath = () => {
+        const newGrid = this.state.grid
+        const pathFinder = new AStar(this.indexToCoords(this.startingPoint), this.indexToCoords(this.endingPoint), this.state.grid)
+
+        pathFinder.setFrameRate(5)
+        pathFinder.setHeuristic(2)
+        pathFinder.addEventListener("nextIteration", this.handleNextIteration)
+
+        const path = pathFinder.findPath().then(path => {
+            pathFinder.removeEventListener("nextIteration", this.handleNextIteration)
+            if(path){
+                // Show final path
+                for(let point of path){
+                    newGrid[point[0]][point[1]] = 4
+                    this.nodes[this.coordsToIndex({x:point[0], y:point[1]})].set("PATH")
+                }
+                this.setState({grid: newGrid})
+            }else{
+                alert("There is no path")
+            }
+        })
     }
 
     handleClick = (index) => {
@@ -32,34 +83,6 @@ export default class Grid extends React.Component{
     setWall = () => this.mode = STATES.BLOCKED
     setStart = () => this.mode = STATES.START
     setEnd = () => this.mode = STATES.END
-
-    calculatePath = () => {
-        const newGrid = this.state.grid
-        const pathFinder = new AStar(this.indexToCoords(this.startingPoint), this.indexToCoords(this.endingPoint), this.state.grid)
-
-        pathFinder.setFrameRate(4)
-
-        pathFinder.addEventListener("newCurrentNode", ({detail}) => {
-            if(this.lastNode){
-                this.lastNode.unsetCurrentNode()
-            }
-            const currentNode = detail
-            const index = currentNode.x*this.props.columns+currentNode.y
-            this.nodes[index].setCurrentNode()
-            this.lastNode = this.nodes[index]
-        })
-
-        const path = pathFinder.findPath().then(path => {
-            if(path){
-                for(let point of path){
-                    newGrid[point[0]][point[1]] = 4
-                }
-                this.setState({grid: newGrid})
-            }else{
-                alert("There is no path")
-            }
-        })
-    }
 
     render(){
         return(

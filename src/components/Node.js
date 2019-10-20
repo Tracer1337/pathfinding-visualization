@@ -4,11 +4,11 @@ import {NODE_SIZE, STATES, COLORS} from "../config/constants.js"
 export default class Node extends React.Component{
     state = {backgroundColor: null}
 
-    setCurrentNode = () => {
-        this.setState({backgroundColor: COLORS.CURRENT})
+    set = key => {
+        this.setState({backgroundColor: COLORS[key]})
     }
-    
-    unsetCurrentNode = () => {
+
+    reset = () => {
         this.setState({backgroundColor: null})
     }
 
