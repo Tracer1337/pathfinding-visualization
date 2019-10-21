@@ -3,10 +3,11 @@ import React from "react"
 import {NODE_SIZE, GRID_PADDING} from "./config/constants.js"
 import Grid from "./components/Grid.js"
 import Settings from "./components/Settings.js"
-import SettingsHandler from "./utils/SettingsHandler.js"
+import SettingsProvider from "./utils/SettingsProvider.js"
 
 import AStar from "./algorithms/AStar/AStar.js"
 import Dijkstra from "./algorithms/Dijkstra/Dijkstra.js"
+import BreadthFirst from "./algorithms/BreadthFirst/BreadthFirst.js"
 
 export default class App extends React.Component{
     state = {
@@ -28,14 +29,17 @@ export default class App extends React.Component{
         const {newOpenListNodes, newClosedListNode} = detail
 
         // Show currentNode
-        // const currentNodeIndex = this.coordsToIndex(detail.currentNode)
-        // this.nodes[currentNodeIndex].set("CURRENT")
-        // this.lastCurrentNode = this.nodes[currentNodeIndex]
+        // if(detail.currentNode){
+        //     const currentNodeIndex = this.coordsToIndex(detail.currentNode)
+        //     this.grid.current.nodes[currentNodeIndex].set("CURRENT")
+        // }
 
         // Show new openlist nodes
-        for(let openNode of newOpenListNodes){
-            const openNodeIndex = this.coordsToIndex(openNode)
-            this.grid.current.nodes[openNodeIndex].set("OPEN")
+        if(newOpenListNodes){
+            for(let openNode of newOpenListNodes){
+                const openNodeIndex = this.coordsToIndex(openNode)
+                this.grid.current.nodes[openNodeIndex].set("OPEN")
+            }
         }
 
         // Show new closed list node
@@ -51,7 +55,7 @@ export default class App extends React.Component{
         const endingPoint = this.indexToCoords(this.grid.current.endingPoint)
 
         let pathFinder
-        switch(parseInt(SettingsHandler.settings.algorithm.value)){
+        switch(parseInt(SettingsProvider.settings.algorithm.value)){
             case 0:
                 pathFinder = new AStar(startingPoint, endingPoint, grid)
                 pathFinder.setHeuristic(2)
@@ -59,6 +63,10 @@ export default class App extends React.Component{
 
             case 1:
                 pathFinder = new Dijkstra(startingPoint, grid)
+                break
+
+            case 2:
+                pathFinder = new BreadthFirst(startingPoint, grid)
                 break
 
             default:
@@ -87,7 +95,7 @@ export default class App extends React.Component{
     }
 
     componentDidMount(){
-        SettingsHandler.addEventListener("searchPath", this.calculatePath)
+        SettingsProvider.addEventListener("searchPath", this.calculatePath)
     }
 
     render(){

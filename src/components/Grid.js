@@ -2,7 +2,7 @@ import React from "react"
 
 import Node from "./Node.js"
 import {NODE_SIZE, STATES} from "../config/constants.js"
-import SettingsHandler from "../utils/SettingsHandler.js"
+import SettingsProvider from "../utils/SettingsProvider.js"
 
 export default class Grid extends React.Component{
     state = {grid: Array(this.props.rows).fill(0).map(() => Array(this.props.columns).fill(STATES.WALKABLE))}
@@ -34,8 +34,8 @@ export default class Grid extends React.Component{
     }
 
     componentDidMount(){
-        SettingsHandler.addEventListener("gridSetterStateChange", ({detail}) => this.mode = parseInt(detail))
-        SettingsHandler.addEventListener("clearGrid", this.clearGrid)
+        SettingsProvider.addEventListener("gridSetterStateChange", ({detail}) => this.mode = parseInt(detail))
+        SettingsProvider.addEventListener("clearGrid", this.clearGrid)
     }
 
     render(){

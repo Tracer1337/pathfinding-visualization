@@ -1,7 +1,7 @@
 import Emitter from "./Emitter.js"
 import {STATES} from "../config/constants.js"
 
-class SettingsHandler extends Emitter{
+class SettingsProvider extends Emitter{
     settings = {
         algorithm: {
             type: "select",
@@ -14,6 +14,10 @@ class SettingsHandler extends Emitter{
                 {
                     label: "Dijkstra",
                     value: 1
+                },
+                {
+                    label: "Breadth First",
+                    value: 2
                 }
             ]
         },
@@ -53,4 +57,4 @@ class SettingsHandler extends Emitter{
     invoke = key => this.dispatchEvent(new CustomEvent(key))
 }
 
-export default new SettingsHandler()
+export default new SettingsProvider()
