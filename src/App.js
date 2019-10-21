@@ -1,17 +1,13 @@
 import React from "react"
 
-import {STATES, GRID_PADDING} from "./config/constants.js"
+import {STATES} from "./config/constants.js"
 import Grid from "./components/Grid.js"
 import Settings from "./components/Settings.js"
 import SettingsProvider from "./utils/SettingsProvider.js"
 import algorithms from "./algorithms/AlgorithmProvider.js"
 
 export default class App extends React.Component{
-    state = {
-        columns: Math.floor((window.innerWidth - GRID_PADDING * 2) / SettingsProvider.settings.nodeSize.value),
-        rows: Math.floor((window.innerHeight - GRID_PADDING * 2) / SettingsProvider.settings.nodeSize.value)
-    }
-
+    state = {}
     grid = React.createRef()
 
     indexToCoords = index => [index%this.state.columns, Math.floor(index/this.state.columns)]
@@ -67,9 +63,13 @@ export default class App extends React.Component{
     }
 
     componentDidMount(){
+        this.setState({
+            columns: Math.floor(this.gridWrapper.clientWidth / SettingsProvider.settings.nodeSize.value),
+            rows: Math.floor(this.gridWrapper.clientHeight / SettingsProvider.settings.nodeSize.value)
+        })
         SettingsProvider.addEventListener("nodeSizeChange", () => this.setState({
-            columns: Math.floor((window.innerWidth - GRID_PADDING * 2) / SettingsProvider.settings.nodeSize.value),
-            rows: Math.floor((window.innerHeight - GRID_PADDING * 2) / SettingsProvider.settings.nodeSize.value)
+            columns: Math.floor(this.gridWrapper.clientWidth / SettingsProvider.settings.nodeSize.value),
+            rows: Math.floor(this.gridWrapper.clientHeight / SettingsProvider.settings.nodeSize.value)
         }))
         SettingsProvider.addEventListener("searchPath", this.calculatePath)
     }
@@ -77,12 +77,18 @@ export default class App extends React.Component{
     render(){
         return(
             <div className="app">
-                <Settings/>
-                <Grid
-                    columns={this.state.columns}
-                    rows={this.state.rows}
-                    ref={this.grid}
-                />
+                <aside className="sidebar">
+                    <Settings/>
+                </aside>
+                <main className="stage">
+                    <div className="grid-wrapper" ref={ref => this.gridWrapper = ref}>
+                        {this.state.columns && this.state.rows ? <Grid
+                            columns={this.state.columns}
+                            rows={this.state.rows}
+                            ref={this.grid}
+                        /> : null}
+                    </div>
+                </main>
             </div>
         )
     }

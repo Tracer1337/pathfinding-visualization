@@ -1,6 +1,5 @@
 export const DEBUG_MODE = false
 
-export const GRID_PADDING = 10
 export const NODE_BORDER_WIDTH = 1
 
 export const ROWS_CONSTRAINT = 50

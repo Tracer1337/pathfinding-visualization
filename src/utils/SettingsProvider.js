@@ -5,6 +5,7 @@ class SettingsProvider extends Emitter{
     settings = {
         algorithm: {
             type: "select",
+            label: "Algorithm",
             value: 0,
             options: [
                 {
@@ -27,24 +28,26 @@ class SettingsProvider extends Emitter{
         },
         gridSetterState: {
             type: "select",
+            label: "Element to deploy",
             value: STATES.BLOCKED,
             options: [
                 {
-                    label: "Set Wall",
+                    label: "Wall",
                     value: STATES.BLOCKED
                 },
                 {
-                    label: "Set Start",
+                    label: "Start",
                     value: STATES.START
                 },
                 {
-                    label: "Set End",
+                    label: "End",
                     value: STATES.END
                 }
             ]
         },
         heuristic: {
             type: "select",
+            label: "Heuristic",
             value: 0,
             options: [
                 {
@@ -63,10 +66,11 @@ class SettingsProvider extends Emitter{
         },
         directions: {
             type: "select",
+            label: "Allowed directions",
             value: 0,
             options: [
                 {
-                    label: "4 Directions",
+                    label: "Up | Down | Left | Right",
                     value: 0
                 },
                 {
@@ -75,14 +79,6 @@ class SettingsProvider extends Emitter{
                 }
             ]
         },
-        searchPath: {
-            type: "action",
-            label: "Search Path"
-        },
-        clearGrid: {
-            type: "action",
-            label: "Clear Grid"
-        },
         framerate: {
             type: "number",
             value: 50,
@@ -90,9 +86,20 @@ class SettingsProvider extends Emitter{
         },
         nodeSize: {
             type: "number",
-            value: 75,
+            value: 50,
             label: "Node Size"
-        }
+        },
+        clearGrid: {
+            type: "action",
+            color: "secondary",
+            label: "Clear Grid"
+        },
+        searchPath: {
+            type: "action",
+            color: "primary",
+            variant: "outlined",
+            label: "Search Path"
+        },
     }
 
     set = (key, value) => {

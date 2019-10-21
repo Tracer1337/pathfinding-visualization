@@ -1,39 +1,79 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap");
+
 body{
     margin: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
+    font-family: "Roboto", sans-serif;
 
-    .grid{
+    .app{
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
         display: flex;
-        flex-wrap: wrap;
 
-        .node{
-            border: 1px solid #1abc9c;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 15%;
+        .stage{
+            flex: 1;
+            height: 100%;
 
-            &.animate{
-                animation: node 200ms ease-in-out;
+            .grid-wrapper{
+                height: 100%;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
 
-                @keyframes node{
-                    50%{transform: scale(1.1)}
-                    100%{transform: scale(1)}
+                .grid{
+                    display: flex;
+                    flex-wrap: wrap;
+
+                    .node{
+                        border: 1px solid #1abc9c;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        border-radius: 15%;
+
+                        &.animate{
+                            animation: node 200ms ease-in-out;
+
+                            @keyframes node{
+                                50%{transform: scale(1.1)}
+                                100%{transform: scale(1)}
+                            }
+                        }
+                    }
                 }
             }
         }
-    }
 
-    .settings{
-        .number{
-            label{
-                margin-left: 10px;
-            }
-            input{
-                width: 50px;
+        .sidebar{
+            width: 250px;
+            height: 100%;
+
+            .settings{
+                width: 100%;
+                height: 100%;
+                margin-top: 10px;
+
+                .input-wrapper{
+                    padding: 5px 15px;
+
+                    .input{
+                        width: 100%;
+                    }
+                }
+
+                .number{
+                    label{
+                        margin-left: 10px;
+                    }
+                    input{
+                        width: 50px;
+                    }
+                }
             }
         }
     }
