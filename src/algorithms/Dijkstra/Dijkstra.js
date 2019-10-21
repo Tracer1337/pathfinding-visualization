@@ -12,8 +12,8 @@ export default class Dijkstra extends Emitter{
         this.priorityQueue = []
         this.openList = [this.startNode]
         this.closedList = []
-
-        this.grid = grid
+        this.grid = JSON.parse(JSON.stringify(grid))
+        console.log(this.grid)
 
         this.setDirections(1)
     }
@@ -40,7 +40,7 @@ export default class Dijkstra extends Emitter{
             // Move current node from openList to closedList
             this.openList.shift()
             this.closedList.push(currentNode)
-
+            console.log(currentNode, this.grid[currentNode.y][currentNode.x])
             // Found the end node
             if(this.grid[currentNode.y][currentNode.x] === 3){
                 let path = []

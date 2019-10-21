@@ -17,7 +17,7 @@ export default class AStar extends Emitter{
         super()
         this.startNode = new Node(...start)
         this.endNode = new Node(...end)
-        this.grid = grid
+        this.grid = JSON.parse(JSON.stringify(grid))
         this.openList = [this.startNode]
         this.closedList = []
 

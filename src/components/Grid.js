@@ -30,7 +30,11 @@ export default class Grid extends React.Component{
         const shouldReset = [STATES.PATH, STATES.CURRENT, STATES.OPEN, STATES.CLOSED]
         this.grid = this.grid.map((column, y) => column.map(((cell, x) => {
             const index = this.coordsToIndex({x,y})
-            if(index !== this.startingPoint && index !== this.endingPoint && shouldReset.includes(cell)){
+            if(index === this.startingPoint)
+                return STATES.START
+            if(index === this.endingPoint)
+                return STATES.END
+            if(shouldReset.includes(cell)){
                 this.nodes[index].reset()
                 return STATES.WALKABLE
             }

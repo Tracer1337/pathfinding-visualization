@@ -7,7 +7,7 @@ export default class BreadthFirst extends Emitter{
     constructor(start, end, grid){
         super()
         this.startingPoint = new Node(...start)
-        this.grid = grid
+        this.grid = JSON.parse(JSON.stringify(grid))
         this.queue = [this.startingPoint]
         this.discoveredList = [this.startingPoint]
         this.closedList = []
