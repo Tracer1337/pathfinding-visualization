@@ -3,6 +3,7 @@ import React from "react"
 import Node from "./Node.js"
 import {STATES, DEBUG_MODE, ROWS_CONSTRAINT, COLUMNS_CONSTRAINT} from "../config/constants.js"
 import SettingsProvider from "../utils/SettingsProvider.js"
+import sleep from "../utils/sleep.js"
 
 export default class Grid extends React.Component{
     constructor(props){
@@ -39,18 +40,25 @@ export default class Grid extends React.Component{
     }
 
     handleClick = (index) => {
-        this.toggleGridAtIndex(index, this.mode)
         if(this.mode === STATES.START){
+            if(this.startingPoint){
+                this.toggleGridAtIndex(this.startingPoint, STATES.START)
+            }
             this.startingPoint = index
         } else if(this.mode === STATES.END){
+            if(this.endingPoint){
+                this.toggleGridAtIndex(this.endingPoint, STATES.END)
+            }
             this.endingPoint = index
         }
+        this.toggleGridAtIndex(index, this.mode)
     }
 
-    showPath = path => {
+    showPath = async path => {
         for(let point of path){
             this.grid[point[1]][point[0]] = 4
             this.nodes[this.coordsToIndex({x:point[0], y:point[1]})].set(STATES.PATH)
+            await sleep(1/SettingsProvider.settings.framerate.value*1000)
         }
     }
 

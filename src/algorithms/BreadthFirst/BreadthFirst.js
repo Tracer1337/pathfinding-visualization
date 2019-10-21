@@ -32,7 +32,7 @@ export default class BreadthFirst extends Emitter{
                     path.push([currentNode.x, currentNode.y])
                     currentNode = currentNode.parent
                 }
-                return Promise.resolve(path.reverse())
+                return Promise.resolve(path)
             }
 
             // Get the neighbours of the current node

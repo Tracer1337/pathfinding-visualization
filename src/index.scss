@@ -10,10 +10,20 @@ body{
         flex-wrap: wrap;
 
         .node{
-            outline: 1px solid black;
+            border: 1px solid #1abc9c;
             display: flex;
             justify-content: center;
             align-items: center;
+            border-radius: 15%;
+
+            &.animate{
+                animation: node 200ms ease-in-out;
+
+                @keyframes node{
+                    50%{transform: scale(1.1)}
+                    100%{transform: scale(1)}
+                }
+            }
         }
     }
 

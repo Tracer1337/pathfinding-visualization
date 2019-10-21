@@ -58,7 +58,7 @@ export default class AStar extends Emitter{
                     path.push([current.x, current.y])
                     current = current.parentNode
                 }
-                return Promise.resolve(path.reverse())
+                return Promise.resolve(path)
             }
 
             // Generate currentNode's adjacent nodes and set their parents to currentNode

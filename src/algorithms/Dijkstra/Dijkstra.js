@@ -48,7 +48,7 @@ export default class Dijkstra extends Emitter{
                     path.push([currentNode.x, currentNode.y])
                     currentNode = currentNode.parentNode
                 }
-                return path.reverse()
+                return Promise.resolve(path)
             }
 
             // Get the neighbours of the current node and put them into the open list if neccessary

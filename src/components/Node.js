@@ -1,22 +1,34 @@
 import React from "react"
-import {STATES, COLORS} from "../config/constants.js"
+import {STATES, COLORS, NODE_BORDER_WIDTH} from "../config/constants.js"
 import SettingsProvider from "../utils/SettingsProvider.js"
 
 export default class Node extends React.Component{
-    state = {backgroundColor: COLORS[this.props.state]}
+    state = {state: this.props.state}
 
     toggle = key => {
-        if(this.state.backgroundColor === COLORS[key]){
-            this.setState({backgroundColor: COLORS[STATES.WALKABLE]})
+        if(this.state.state === key){
+            this.setState({state: STATES.WALKABLE})
         }else{
-            this.setState({backgroundColor: COLORS[key]})
+            this.setState({state: key})
         }
     }
 
-    set = key => this.setState({backgroundColor: COLORS[key]})
+    set = key => {
+        if(this.state.state !== STATES.START && this.state.state !== STATES.END){
+            this.setState({state: key})
+        }
+    }
 
-    reset = () => this.setState({backgroundColor: COLORS[STATES.WALKABLE]})
-    
+    reset = () => this.setState({state: STATES.WALKABLE})
+
+    setState(newState){
+        super.setState(newState)
+        if(newState.state !== STATES.WALKABLE){
+            this.node.classList.add("animate")
+            setTimeout(() => this.node.classList.remove("animate"), 200)
+        }
+    }
+
     componentDidMount(){
         SettingsProvider.addEventListener("nodeSizeChange", () => this.forceUpdate())
     }
@@ -26,11 +38,12 @@ export default class Node extends React.Component{
             <div
                 className="node"
                 style={{
-                    width: SettingsProvider.settings.nodeSize.value+"px",
-                    height: SettingsProvider.settings.nodeSize.value+"px",
-                    backgroundColor: this.state.backgroundColor
+                    width: SettingsProvider.settings.nodeSize.value-NODE_BORDER_WIDTH*2+"px",
+                    height: SettingsProvider.settings.nodeSize.value-NODE_BORDER_WIDTH*2+"px",
+                    backgroundColor: COLORS[this.state.state]
                 }}
                 onClick={this.props.onClick}
+                ref={ref => this.node = ref}
             >{this.props.children}</div>
         )
     }
