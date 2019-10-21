@@ -35,6 +35,9 @@ body{
                         justify-content: center;
                         align-items: center;
                         border-radius: 15%;
+                        background-repeat: no-repeat;
+                        background-position: center;
+                        background-size: contain;
 
                         &.animate{
                             animation: node 200ms ease-in-out;

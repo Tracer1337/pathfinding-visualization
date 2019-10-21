@@ -27,6 +27,7 @@ export default class App extends React.Component{
             for(let openNode of newOpenListNodes){
                 const openNodeIndex = this.coordsToIndex(openNode)
                 this.grid.current.nodes[openNodeIndex].set(STATES.OPEN)
+                this.grid.current.setGridAtIndex(openNodeIndex, STATES.OPEN)
             }
         }
 
@@ -34,10 +35,13 @@ export default class App extends React.Component{
         if(newClosedListNode){
             const closedNodeIndex = this.coordsToIndex(newClosedListNode)
             this.grid.current.nodes[closedNodeIndex].set(STATES.CLOSED)
+            this.grid.current.setGridAtIndex(closedNodeIndex, STATES.CLOSED)
         }
     }
 
     calculatePath = () => {
+        this.grid.current.initNewPath()
+
         const grid = this.grid.current.grid
         const startingPoint = this.indexToCoords(this.grid.current.startingPoint)
         const endingPoint = this.indexToCoords(this.grid.current.endingPoint)

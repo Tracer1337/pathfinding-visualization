@@ -1,5 +1,5 @@
 import React from "react"
-import {STATES, COLORS, NODE_BORDER_WIDTH} from "../config/constants.js"
+import {STATES, BACKGROUNDS, NODE_BORDER_WIDTH} from "../config/constants.js"
 import SettingsProvider from "../utils/SettingsProvider.js"
 
 export default class Node extends React.Component{
@@ -34,13 +34,23 @@ export default class Node extends React.Component{
     }
 
     render(){
+        let background = BACKGROUNDS[this.state.state], backgroundImage, backgroundColor
+
+        if(background[0] === "Image"){
+            backgroundImage = background[1]
+            backgroundColor = BACKGROUNDS[STATES.PATH][1]
+        }else if(background[0] === "Color"){
+            backgroundColor = background[1]
+        }
+
         return(
             <div
                 className="node"
                 style={{
                     width: SettingsProvider.settings.nodeSize.value-NODE_BORDER_WIDTH*2+"px",
                     height: SettingsProvider.settings.nodeSize.value-NODE_BORDER_WIDTH*2+"px",
-                    backgroundColor: COLORS[this.state.state]
+                    backgroundImage,
+                    backgroundColor // BG == BORDER
                 }}
                 onClick={this.props.onClick}
                 ref={ref => this.node = ref}

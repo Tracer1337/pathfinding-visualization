@@ -26,6 +26,18 @@ export default class Grid extends React.Component{
         this.endingPoint = null
     }
 
+    initNewPath = () => {
+        const shouldReset = [STATES.PATH, STATES.CURRENT, STATES.OPEN, STATES.CLOSED]
+        this.grid = this.grid.map((column, y) => column.map(((cell, x) => {
+            const index = this.coordsToIndex({x,y})
+            if(index !== this.startingPoint && index !== this.endingPoint && shouldReset.includes(cell)){
+                this.nodes[index].reset()
+                return STATES.WALKABLE
+            }
+            return cell
+        })))
+    }
+
     indexToCoords = index => [index%this.props.columns, Math.floor(index/this.props.columns)]
     coordsToIndex = ({x,y}) => y*this.props.columns+x
 
@@ -37,6 +49,11 @@ export default class Grid extends React.Component{
         }else{
             this.grid[coords[1]][coords[0]] = parseInt(value)
         }
+    }
+
+    setGridAtIndex(index, value){
+        const coords = this.indexToCoords(index)
+        this.grid[coords[1]][coords[0]] = value
     }
 
     handleClick = (index) => {

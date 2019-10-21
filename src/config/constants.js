@@ -1,3 +1,6 @@
+import Arrow from "../assets/icons/chevron_right-24px.svg"
+import Cross from "../assets/icons/highlight_off-24px.svg"
+
 export const DEBUG_MODE = false
 
 export const NODE_BORDER_WIDTH = 1
@@ -16,15 +19,18 @@ export const STATES = {
     CLOSED: 7
 }
 
-export const COLORS = {
-    [STATES.WALKABLE]: "white",
-    [STATES.BLOCKED]: "#2c3e50",
-    [STATES.START]: "#3498db",
-    [STATES.END]: "#e74c3c",
-    [STATES.PATH]: "#2ecc71",
-    [STATES.CURRENT]: "#f1c40f",
-    [STATES.OPEN]: "#1abc9c",
-    [STATES.CLOSED]: "#16a085"
+const Color = c => ["Color", c]
+const Image = img => ["Image", img]
+
+export const BACKGROUNDS = {
+    [STATES.WALKABLE]: Color("white"),
+    [STATES.BLOCKED]: Color("#2c3e50"),
+    [STATES.START]: Image(`url(${Arrow})`),
+    [STATES.END]: Image(`url(${Cross})`),
+    [STATES.PATH]: Color("#2ecc71"),
+    [STATES.CURRENT]: Color("#f1c40f"),
+    [STATES.OPEN]: Color("#1abc9c"),
+    [STATES.CLOSED]: Color("#16a085")
 }
 
 export const Directions = [
