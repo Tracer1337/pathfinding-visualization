@@ -8,6 +8,7 @@ import SettingsProvider from "./utils/SettingsProvider.js"
 import AStar from "./algorithms/AStar/AStar.js"
 import Dijkstra from "./algorithms/Dijkstra/Dijkstra.js"
 import BreadthFirst from "./algorithms/BreadthFirst/BreadthFirst.js"
+import DepthFirst from "./algorithms/DepthFirst/DepthFirst.js"
 
 export default class App extends React.Component{
     state = {
@@ -67,6 +68,10 @@ export default class App extends React.Component{
 
             case 2:
                 pathFinder = new BreadthFirst(startingPoint, grid)
+                break
+
+            case 3:
+                pathFinder = new DepthFirst(startingPoint, grid)
                 break
 
             default:

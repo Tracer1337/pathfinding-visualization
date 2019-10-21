@@ -18,6 +18,10 @@ class SettingsProvider extends Emitter{
                 {
                     label: "Breadth First",
                     value: 2
+                },
+                {
+                    label: "Depth First",
+                    value: 3
                 }
             ]
         },

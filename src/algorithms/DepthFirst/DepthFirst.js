@@ -3,12 +3,12 @@ import sleep from "../../utils/sleep.js"
 import {Directions} from "../../config/constants.js"
 import Node from "./Node.js"
 
-export default class BreadthFirst extends Emitter{
+export default class DepthFirst extends Emitter{
     constructor(start, grid){
         super()
         this.startingPoint = new Node(...start)
         this.grid = grid
-        this.queue = [this.startingPoint]
+        this.stack = [this.startingPoint]
         this.discoveredList = [this.startingPoint]
         this.closedList = []
         this.setDirections(0)
@@ -20,9 +20,9 @@ export default class BreadthFirst extends Emitter{
     isDiscovered = node => this.discoveredList.some(e => e.equal(node))
 
     async findPath(){
-        while(this.queue.length){
+        while(this.stack.length){
             // Get and remove the node at the top of the queue
-            let currentNode = this.queue.shift()
+            let currentNode = this.stack.pop()
             this.closedList.push(currentNode)
 
             // Found the goal
@@ -54,7 +54,7 @@ export default class BreadthFirst extends Emitter{
                     newNode.parent = currentNode
                     newDiscoveredNodes.push(newNode)
                     this.discoveredList.push(newNode)
-                    this.queue.push(newNode)
+                    this.stack.push(newNode)
                 }
             }
 
