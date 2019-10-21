@@ -1,3 +1,5 @@
+export const DEBUG_MODE = true
+
 export const NODE_SIZE = 75
 
 export const GRID_PADDING = 10
@@ -7,18 +9,21 @@ export const STATES = {
     BLOCKED: 1,
     START: 2,
     END: 3,
-    PATH: 4
+    PATH: 4,
+    CURRENT: 5,
+    OPEN: 6,
+    CLOSED: 7
 }
 
 export const COLORS = {
-    WALKABLE: "white",
-    BLOCKED: "black",
-    START: "blue",
-    END: "green",
-    PATH: "green",
-    CURRENT: "yellow",
-    OPEN: "cyan",
-    CLOSED: "grey"
+    [STATES.WALKABLE]: "white",
+    [STATES.BLOCKED]: "black",
+    [STATES.START]: "blue",
+    [STATES.END]: "green",
+    [STATES.PATH]: "green",
+    [STATES.CURRENT]: "yellow",
+    [STATES.OPEN]: "cyan",
+    [STATES.CLOSED]: "grey"
 }
 
 export const Directions = [

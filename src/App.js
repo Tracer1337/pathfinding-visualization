@@ -1,6 +1,6 @@
 import React from "react"
 
-import {NODE_SIZE, GRID_PADDING} from "./config/constants.js"
+import {NODE_SIZE, STATES, GRID_PADDING} from "./config/constants.js"
 import Grid from "./components/Grid.js"
 import Settings from "./components/Settings.js"
 import SettingsProvider from "./utils/SettingsProvider.js"
@@ -14,13 +14,8 @@ export default class App extends React.Component{
 
     grid = React.createRef()
 
-    coordsToIndex({x,y}){
-        return y*this.state.columns+x
-    }
-
-    indexToCoords(index){
-        return [index%this.state.columns, Math.floor(index/this.state.columns)]
-    }
+    indexToCoords = index => [index%this.state.columns, Math.floor(index/this.state.columns)]
+    coordsToIndex = ({x,y}) => y*this.state.columns+x
 
     handleNextIteration = ({detail}) => {
         const {newOpenListNodes, newClosedListNode} = detail
@@ -35,27 +30,27 @@ export default class App extends React.Component{
         if(newOpenListNodes){
             for(let openNode of newOpenListNodes){
                 const openNodeIndex = this.coordsToIndex(openNode)
-                this.grid.current.nodes[openNodeIndex].set("OPEN")
+                this.grid.current.nodes[openNodeIndex].set(STATES.OPEN)
             }
         }
 
         // Show new closed list node
         if(newClosedListNode){
             const closedNodeIndex = this.coordsToIndex(newClosedListNode)
-            this.grid.current.nodes[closedNodeIndex].set("CLOSED")
+            this.grid.current.nodes[closedNodeIndex].set(STATES.CLOSED)
         }
     }
 
     calculatePath = () => {
-        const grid = this.grid.current.getGrid()
+        const grid = this.grid.current.grid
         const startingPoint = this.indexToCoords(this.grid.current.startingPoint)
         const endingPoint = this.indexToCoords(this.grid.current.endingPoint)
 
         let pathFinder = new algorithms[SettingsProvider.settings.algorithm.value](startingPoint, endingPoint, grid)
 
         if(pathFinder.setHeuristic)
-            pathFinder.setHeuristic(2)
-        pathFinder.setDirections(1)
+            pathFinder.setHeuristic(SettingsProvider.settings.heuristic.value)
+        pathFinder.setDirections(SettingsProvider.settings.directions.value)
         pathFinder.setFramerate(50)
         pathFinder.addEventListener("nextIteration", this.handleNextIteration)
 
@@ -63,11 +58,7 @@ export default class App extends React.Component{
             pathFinder.removeEventListener("nextIteration", this.handleNextIteration)
             if(path){
                 // Show final path
-                for(let point of path){
-                    grid[point[1]][point[0]] = 4
-                    this.grid.current.nodes[this.coordsToIndex({x:point[0], y:point[1]})].set("PATH")
-                }
-                this.grid.current.setGrid(grid)
+                this.grid.current.showPath(path)
             }else{
                 // No path found
                 alert("There is no path")
@@ -82,14 +73,7 @@ export default class App extends React.Component{
     render(){
         return(
             <div className="app">
-                <Settings
-                    grid={this.grid}
-                    setWall={() => this.grid.current.setWall()}
-                    setStart={() => this.grid.current.setStart()}
-                    setEnd={() => this.grid.current.setEnd()}
-                    calculatePath={this.calculatePath}
-                    onAlgorithmChange={e => this.setState({algorithm: e.target.value})}
-                />
+                <Settings/>
                 <Grid
                     columns={this.state.columns}
                     rows={this.state.rows}

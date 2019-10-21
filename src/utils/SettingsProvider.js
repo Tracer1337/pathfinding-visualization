@@ -43,6 +43,38 @@ class SettingsProvider extends Emitter{
                 }
             ]
         },
+        heuristic: {
+            type: "select",
+            value: 0,
+            options: [
+                {
+                    label: "Manhattan",
+                    value: 0
+                },
+                {
+                    label: "Diagonal",
+                    value: 1
+                },
+                {
+                    label: "Euclidean",
+                    value: 2
+                },
+            ]
+        },
+        directions: {
+            type: "select",
+            value: 0,
+            options: [
+                {
+                    label: "4 Directions",
+                    value: 0
+                },
+                {
+                    label: "Allow Diagonal",
+                    value: 1
+                }
+            ]
+        },
         searchPath: {
             type: "action",
             label: "Search Path"
