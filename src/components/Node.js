@@ -5,14 +5,18 @@ import SettingsProvider from "../utils/SettingsProvider.js"
 export default class Node extends React.Component{
     state = {backgroundColor: COLORS[this.props.state]}
 
-    set = key => {
-        this.setState({backgroundColor: COLORS[key]})
+    toggle = key => {
+        if(this.state.backgroundColor === COLORS[key]){
+            this.setState({backgroundColor: COLORS[STATES.WALKABLE]})
+        }else{
+            this.setState({backgroundColor: COLORS[key]})
+        }
     }
 
-    reset = () => {
-        this.setState({backgroundColor: STATES.WALKABLE})
-    }
+    set = key => this.setState({backgroundColor: COLORS[key]})
 
+    reset = () => this.setState({backgroundColor: COLORS[STATES.WALKABLE]})
+    
     componentDidMount(){
         SettingsProvider.addEventListener("nodeSizeChange", () => this.forceUpdate())
     }

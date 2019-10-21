@@ -21,19 +21,25 @@ export default class Grid extends React.Component{
     clearGrid = () => {
         this.nodes.forEach(node => node.reset())
         this.grid = this.grid.map(column => column.map(cell => cell = STATES.WALKABLE))
+        this.startingPoint = null
+        this.endingPoint = null
     }
 
     indexToCoords = index => [index%this.props.columns, Math.floor(index/this.props.columns)]
     coordsToIndex = ({x,y}) => y*this.props.columns+x
 
-    setGridAtIndex(index, value){
+    toggleGridAtIndex(index, value){
         const coords = this.indexToCoords(index)
-        this.nodes[index].set(value)
-        this.grid[coords[1]][coords[0]] = parseInt(value)
+        this.nodes[index].toggle(value)
+        if(this.grid[coords[1]][coords[0]] === parseInt(value)){
+            this.grid[coords[1]][coords[0]] = STATES.WALKABLE
+        }else{
+            this.grid[coords[1]][coords[0]] = parseInt(value)
+        }
     }
 
     handleClick = (index) => {
-        this.setGridAtIndex(index, this.mode)
+        this.toggleGridAtIndex(index, this.mode)
         if(this.mode === STATES.START){
             this.startingPoint = index
         } else if(this.mode === STATES.END){
