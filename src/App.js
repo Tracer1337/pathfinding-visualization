@@ -4,11 +4,7 @@ import {NODE_SIZE, GRID_PADDING} from "./config/constants.js"
 import Grid from "./components/Grid.js"
 import Settings from "./components/Settings.js"
 import SettingsProvider from "./utils/SettingsProvider.js"
-
-import AStar from "./algorithms/AStar/AStar.js"
-import Dijkstra from "./algorithms/Dijkstra/Dijkstra.js"
-import BreadthFirst from "./algorithms/BreadthFirst/BreadthFirst.js"
-import DepthFirst from "./algorithms/DepthFirst/DepthFirst.js"
+import algorithms from "./algorithms/AlgorithmProvider.js"
 
 export default class App extends React.Component{
     state = {
@@ -55,30 +51,10 @@ export default class App extends React.Component{
         const startingPoint = this.indexToCoords(this.grid.current.startingPoint)
         const endingPoint = this.indexToCoords(this.grid.current.endingPoint)
 
-        let pathFinder
-        switch(parseInt(SettingsProvider.settings.algorithm.value)){
-            case 0:
-                pathFinder = new AStar(startingPoint, endingPoint, grid)
-                pathFinder.setHeuristic(2)
-                break
+        let pathFinder = new algorithms[SettingsProvider.settings.algorithm.value](startingPoint, endingPoint, grid)
 
-            case 1:
-                pathFinder = new Dijkstra(startingPoint, grid)
-                break
-
-            case 2:
-                pathFinder = new BreadthFirst(startingPoint, grid)
-                break
-
-            case 3:
-                pathFinder = new DepthFirst(startingPoint, grid)
-                break
-
-            default:
-                console.error("[App] Missing algorithm-id")
-                break
-        }
-
+        if(pathFinder.setHeuristic)
+            pathFinder.setHeuristic(2)
         pathFinder.setDirections(1)
         pathFinder.setFramerate(50)
         pathFinder.addEventListener("nextIteration", this.handleNextIteration)

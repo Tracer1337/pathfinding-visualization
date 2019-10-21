@@ -4,7 +4,7 @@ import {Directions} from "../../config/constants.js"
 import Node from "./Node.js"
 
 export default class DepthFirst extends Emitter{
-    constructor(start, grid){
+    constructor(start, end, grid){
         super()
         this.startingPoint = new Node(...start)
         this.grid = grid

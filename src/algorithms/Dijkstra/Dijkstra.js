@@ -4,7 +4,7 @@ import {Directions} from "../../config/constants.js"
 import Node from "./Node.js"
 
 export default class Dijkstra extends Emitter{
-    constructor(start, grid){
+    constructor(start, end, grid){
         super()
         this.startNode = new Node(...start)
         this.startNode.setDistance(0)
