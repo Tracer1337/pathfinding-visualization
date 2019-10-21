@@ -1,13 +1,22 @@
 import React from "react"
 
 import Node from "./Node.js"
-import {STATES, DEBUG_MODE} from "../config/constants.js"
+import {STATES, DEBUG_MODE, ROWS_CONSTRAINT, COLUMNS_CONSTRAINT} from "../config/constants.js"
 import SettingsProvider from "../utils/SettingsProvider.js"
 
 export default class Grid extends React.Component{
-    grid = Array(this.props.rows).fill(0).map(() => Array(this.props.columns).fill(STATES.WALKABLE))
-    mode = STATES.BLOCKED
-    nodes = []
+    constructor(props){
+        super(props)
+        this.createNewGrid()
+        this.mode = STATES.BLOCKED
+        this.nodes = []
+    }
+
+    createNewGrid = () => {
+        const rows = Math.min(this.props.rows, ROWS_CONSTRAINT)
+        const columns = Math.min(this.props.columns, COLUMNS_CONSTRAINT)
+        this.grid = Array(rows).fill(0).map(() => Array(columns).fill(STATES.WALKABLE))
+    }
 
     clearGrid = () => {
         this.nodes.forEach(node => node.reset())
@@ -41,10 +50,12 @@ export default class Grid extends React.Component{
 
     componentDidMount(){
         SettingsProvider.addEventListener("gridSetterStateChange", ({detail}) => this.mode = parseInt(detail))
+        SettingsProvider.addEventListener("nodeSizeChange", () => this.forceUpdate())
         SettingsProvider.addEventListener("clearGrid", this.clearGrid)
     }
 
     render(){
+        this.createNewGrid()
         return(
             <div className="grid" style={{width: this.props.columns*SettingsProvider.settings.nodeSize.value}}>
                 {this.grid.flat().map((state, i) => (

@@ -13,13 +13,17 @@ export default class Node extends React.Component{
         this.setState({backgroundColor: STATES.WALKABLE})
     }
 
+    componentDidMount(){
+        SettingsProvider.addEventListener("nodeSizeChange", () => this.forceUpdate())
+    }
+
     render(){
         return(
             <div
                 className="node"
                 style={{
-                    width: SettingsProvider.settings.nodeSize.value,
-                    height: SettingsProvider.settings.nodeSize.value,
+                    width: SettingsProvider.settings.nodeSize.value+"px",
+                    height: SettingsProvider.settings.nodeSize.value+"px",
                     backgroundColor: this.state.backgroundColor
                 }}
                 onClick={this.props.onClick}

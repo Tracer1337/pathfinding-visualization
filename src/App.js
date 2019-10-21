@@ -67,6 +67,10 @@ export default class App extends React.Component{
     }
 
     componentDidMount(){
+        SettingsProvider.addEventListener("nodeSizeChange", () => this.setState({
+            columns: Math.floor((window.innerWidth - GRID_PADDING * 2) / SettingsProvider.settings.nodeSize.value),
+            rows: Math.floor((window.innerHeight - GRID_PADDING * 2) / SettingsProvider.settings.nodeSize.value)
+        }))
         SettingsProvider.addEventListener("searchPath", this.calculatePath)
     }
 

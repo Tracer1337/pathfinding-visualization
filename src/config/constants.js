@@ -1,6 +1,9 @@
-export const DEBUG_MODE = true
+export const DEBUG_MODE = false
 
 export const GRID_PADDING = 10
+
+export const ROWS_CONSTRAINT = 50
+export const COLUMNS_CONSTRAINT = 50
 
 export const STATES = {
     WALKABLE: 0,
