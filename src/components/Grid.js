@@ -1,7 +1,7 @@
 import React from "react"
 
 import Node from "./Node.js"
-import {NODE_SIZE, STATES, DEBUG_MODE} from "../config/constants.js"
+import {STATES, DEBUG_MODE} from "../config/constants.js"
 import SettingsProvider from "../utils/SettingsProvider.js"
 
 export default class Grid extends React.Component{
@@ -46,7 +46,7 @@ export default class Grid extends React.Component{
 
     render(){
         return(
-            <div className="grid" style={{width: this.props.columns*NODE_SIZE}}>
+            <div className="grid" style={{width: this.props.columns*SettingsProvider.settings.nodeSize.value}}>
                 {this.grid.flat().map((state, i) => (
                     <Node
                         state={state}

@@ -1,5 +1,6 @@
 import React from "react"
-import {NODE_SIZE, STATES, COLORS} from "../config/constants.js"
+import {STATES, COLORS} from "../config/constants.js"
+import SettingsProvider from "../utils/SettingsProvider.js"
 
 export default class Node extends React.Component{
     state = {backgroundColor: COLORS[this.props.state]}
@@ -16,7 +17,11 @@ export default class Node extends React.Component{
         return(
             <div
                 className="node"
-                style={{width: NODE_SIZE, height: NODE_SIZE, backgroundColor: this.state.backgroundColor}}
+                style={{
+                    width: SettingsProvider.settings.nodeSize.value,
+                    height: SettingsProvider.settings.nodeSize.value,
+                    backgroundColor: this.state.backgroundColor
+                }}
                 onClick={this.props.onClick}
             >{this.props.children}</div>
         )

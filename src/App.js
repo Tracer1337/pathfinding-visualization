@@ -1,6 +1,6 @@
 import React from "react"
 
-import {NODE_SIZE, STATES, GRID_PADDING} from "./config/constants.js"
+import {STATES, GRID_PADDING} from "./config/constants.js"
 import Grid from "./components/Grid.js"
 import Settings from "./components/Settings.js"
 import SettingsProvider from "./utils/SettingsProvider.js"
@@ -8,8 +8,8 @@ import algorithms from "./algorithms/AlgorithmProvider.js"
 
 export default class App extends React.Component{
     state = {
-        columns: Math.floor((window.innerWidth - GRID_PADDING * 2) / NODE_SIZE),
-        rows: Math.floor((window.innerHeight - GRID_PADDING * 2) / NODE_SIZE)
+        columns: Math.floor((window.innerWidth - GRID_PADDING * 2) / SettingsProvider.settings.nodeSize.value),
+        rows: Math.floor((window.innerHeight - GRID_PADDING * 2) / SettingsProvider.settings.nodeSize.value)
     }
 
     grid = React.createRef()
@@ -51,7 +51,7 @@ export default class App extends React.Component{
         if(pathFinder.setHeuristic)
             pathFinder.setHeuristic(SettingsProvider.settings.heuristic.value)
         pathFinder.setDirections(SettingsProvider.settings.directions.value)
-        pathFinder.setFramerate(50)
+        pathFinder.setFramerate(SettingsProvider.settings.framerate.value)
         pathFinder.addEventListener("nextIteration", this.handleNextIteration)
 
         pathFinder.findPath().then(path => {

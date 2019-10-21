@@ -82,6 +82,16 @@ class SettingsProvider extends Emitter{
         clearGrid: {
             type: "action",
             label: "Clear Grid"
+        },
+        framerate: {
+            type: "number",
+            value: 50,
+            label: "Framerate"
+        },
+        nodeSize: {
+            type: "number",
+            value: 75,
+            label: "Node Size"
         }
     }
 

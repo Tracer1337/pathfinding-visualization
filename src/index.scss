@@ -16,4 +16,15 @@ body{
             align-items: center;
         }
     }
+
+    .settings{
+        .number{
+            label{
+                margin-left: 10px;
+            }
+            input{
+                width: 50px;
+            }
+        }
+    }
 }

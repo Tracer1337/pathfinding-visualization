@@ -11,7 +11,10 @@ export default class Settings extends React.Component{
                         switch(setting.type){
                             case "select":
                                 return(
-                                    <select key={key} onChange={e => SettingsProvider.set(key, e.target.value)}>
+                                    <select
+                                        key={key}
+                                        onChange={e => SettingsProvider.set(key, e.target.value)}
+                                    >
                                         {setting.options.map(option => (
                                             <option value={option.value} key={option.label}>{option.label}</option>
                                         ))}
@@ -19,6 +22,17 @@ export default class Settings extends React.Component{
                                 )
                             case "action":
                                 return <button key={key} onClick={() => SettingsProvider.invoke(key)}>{setting.label}</button>
+                            case "number":
+                                return (
+                                        <span className="number" key={key}>
+                                            <label>{setting.label}</label>
+                                            <input
+                                                type="number"
+                                                onChange={e => SettingsProvider.set(key, e.target.value)}
+                                            />
+                                        </span>)
+                            default:
+                                throw new Error("Unsupported setting type: "+setting.type)
                         }
                     })
                 }

@@ -1,7 +1,5 @@
 export const DEBUG_MODE = true
 
-export const NODE_SIZE = 75
-
 export const GRID_PADDING = 10
 
 export const STATES = {
