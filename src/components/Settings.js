@@ -1,5 +1,5 @@
 import React from "react"
-import {FormControl, InputLabel, Select, MenuItem, Button, TextField} from "@material-ui/core"
+import {FormControl, InputLabel, Select, MenuItem, Button, Input, Slider, Grid} from "@material-ui/core"
 
 import SettingsProvider from "../utils/SettingsProvider.js"
 
@@ -13,7 +13,7 @@ export default class Settings extends React.Component{
             case "select":
                 return(
                     <>
-                        <InputLabel>{SettingsProvider.settings[key].label}</InputLabel>
+                        <InputLabel>{setting.label}</InputLabel>
                         <Select
                             value={this.state[key]}
                             onChange={e => this.handleChange(e, key)}
@@ -36,14 +36,35 @@ export default class Settings extends React.Component{
                     >{setting.label}</Button>
                 )
 
-            case "number":
+            case "slider":
                 return (
-                    <TextField
-                        type="number"
-                        label={setting.label}
-                        value={this.state[key]}
-                        onChange={e => this.handleChange(e, key)}
-                    />
+                    <>
+                        <InputLabel>{setting.label}</InputLabel>
+                        <Grid container spacing={2} className="slider-wrapper">
+                            <Grid item xs>
+                                <Slider
+                                    value={this.state[key]}
+                                    onChange={(e, newValue) => this.handleChange({target: {value: newValue}}, key)}
+                                    step={1}
+                                    min={setting.min}
+                                    max={setting.max}
+                                />
+                            </Grid>
+                            <Grid item>
+                                <Input
+                                    label={setting.label}
+                                    value={this.state[key]}
+                                    onChange={e => this.handleChange(e, key)}
+                                    margin="dense"
+                                    style={{width: 42}}
+                                    inputProps={{
+                                        step: setting.step,
+                                        type: "number"
+                                    }}
+                                />
+                            </Grid>
+                        </Grid>
+                    </>
                 )
 
             default:
@@ -59,7 +80,7 @@ export default class Settings extends React.Component{
     componentDidMount(){
         let newState = {}
         Object.entries(SettingsProvider.settings).forEach(([key, setting]) => {
-            if(setting.type === "select" || setting.type === "number"){
+            if(setting.type === "select" || setting.type === "slider"){
                 newState[key] = setting.value
             }
         })

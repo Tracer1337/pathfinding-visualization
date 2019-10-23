@@ -13,17 +13,23 @@ export default class Grid extends React.Component{
         this.nodes = []
     }
 
+    indexToCoords = index => [index%this.props.columns, Math.floor(index/this.props.columns)]
+    coordsToIndex = ({x,y}) => y*this.props.columns+x
+
     createNewGrid = () => {
+        this.clearGrid()
         const rows = Math.min(this.props.rows, ROWS_CONSTRAINT)
         const columns = Math.min(this.props.columns, COLUMNS_CONSTRAINT)
         this.grid = Array(rows).fill(0).map(() => Array(columns).fill(STATES.WALKABLE))
     }
 
     clearGrid = () => {
-        this.nodes.forEach(node => node.reset())
-        this.grid = this.grid.map(column => column.map(cell => cell = STATES.WALKABLE))
-        this.startingPoint = null
-        this.endingPoint = null
+        if(this.nodes){
+            this.nodes.forEach(node => node && node.reset())
+            this.grid = this.grid.map(column => column.map(cell => cell = STATES.WALKABLE))
+            this.startingPoint = null
+            this.endingPoint = null
+        }
     }
 
     initNewPath = () => {
@@ -42,8 +48,21 @@ export default class Grid extends React.Component{
         })))
     }
 
-    indexToCoords = index => [index%this.props.columns, Math.floor(index/this.props.columns)]
-    coordsToIndex = ({x,y}) => y*this.props.columns+x
+    generateStartingPoint = () => {
+        if(this.props.columns > COLUMNS_CONSTRAINT || this.props.rows > ROWS_CONSTRAINT) return
+        const x = Math.floor(this.props.columns*.2)
+        const y = Math.floor(this.props.rows/2)
+        this.startingPoint = this.coordsToIndex({x, y})
+        this.toggleGridAtIndex(this.startingPoint, STATES.START)
+    }
+
+    generateEndingPoint = () => {
+        if(this.props.columns > COLUMNS_CONSTRAINT || this.props.rows > ROWS_CONSTRAINT) return
+        const x = Math.floor(this.props.columns*.8)
+        const y = Math.floor(this.props.rows/2)
+        this.endingPoint = this.coordsToIndex({x, y})
+        this.toggleGridAtIndex(this.endingPoint, STATES.END)
+    }
 
     toggleGridAtIndex(index, value){
         const coords = this.indexToCoords(index)
@@ -58,6 +77,14 @@ export default class Grid extends React.Component{
     setGridAtIndex(index, value){
         const coords = this.indexToCoords(index)
         this.grid[coords[1]][coords[0]] = value
+    }
+
+    showPath = async path => {
+        for(let point of path){
+            this.grid[point[1]][point[0]] = 4
+            this.nodes[this.coordsToIndex({x:point[0], y:point[1]})].set(STATES.PATH)
+            await sleep(1/SettingsProvider.settings.framerate.value*1000)
+        }
     }
 
     handleClick = (index) => {
@@ -75,18 +102,18 @@ export default class Grid extends React.Component{
         this.toggleGridAtIndex(index, this.mode)
     }
 
-    showPath = async path => {
-        for(let point of path){
-            this.grid[point[1]][point[0]] = 4
-            this.nodes[this.coordsToIndex({x:point[0], y:point[1]})].set(STATES.PATH)
-            await sleep(1/SettingsProvider.settings.framerate.value*1000)
-        }
+    componentDidUpdate(){
+        this.generateStartingPoint()
+        this.generateEndingPoint()
     }
 
     componentDidMount(){
         SettingsProvider.addEventListener("gridSetterStateChange", ({detail}) => this.mode = parseInt(detail))
         SettingsProvider.addEventListener("nodeSizeChange", () => this.forceUpdate())
         SettingsProvider.addEventListener("clearGrid", this.clearGrid)
+
+        this.generateStartingPoint()
+        this.generateEndingPoint()
     }
 
     render(){

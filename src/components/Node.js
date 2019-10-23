@@ -25,12 +25,18 @@ export default class Node extends React.Component{
         super.setState(newState)
         if(newState.state !== STATES.WALKABLE){
             this.node.classList.add("animate")
-            setTimeout(() => this.node.classList.remove("animate"), 200)
+            this.timeout = setTimeout(() => this.node.classList.remove("animate"), 200)
         }
     }
 
     componentDidMount(){
         SettingsProvider.addEventListener("nodeSizeChange", () => this.forceUpdate())
+    }
+
+    componentWillUnmount(){
+        if(this.timeout){
+            clearTimeout(this.timeout)
+        }
     }
 
     render(){
@@ -44,17 +50,19 @@ export default class Node extends React.Component{
         }
 
         return(
-            <div
-                className="node"
-                style={{
-                    width: SettingsProvider.settings.nodeSize.value-NODE_BORDER_WIDTH*2+"px",
-                    height: SettingsProvider.settings.nodeSize.value-NODE_BORDER_WIDTH*2+"px",
-                    backgroundImage,
-                    backgroundColor // BG == BORDER
-                }}
-                onClick={this.props.onClick}
-                ref={ref => this.node = ref}
-            >{this.props.children}</div>
+            <div className="node-border">
+                <div
+                    className="node"
+                    style={{
+                        width: SettingsProvider.settings.nodeSize.value-NODE_BORDER_WIDTH*2+"px",
+                        height: SettingsProvider.settings.nodeSize.value-NODE_BORDER_WIDTH*2+"px",
+                        backgroundImage,
+                        backgroundColor
+                    }}
+                    onClick={this.props.onClick}
+                    ref={ref => this.node = ref}
+                >{this.props.children}</div>
+            </div>
         )
     }
 }

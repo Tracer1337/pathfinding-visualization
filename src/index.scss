@@ -29,8 +29,12 @@ body{
                     display: flex;
                     flex-wrap: wrap;
 
-                    .node{
+                    .node-border{
                         border: 1px solid #1abc9c;
+                        border-radius: 15%;
+                    }
+
+                    .node{
                         display: flex;
                         justify-content: center;
                         align-items: center;
@@ -67,14 +71,9 @@ body{
                     .input{
                         width: 100%;
                     }
-                }
 
-                .number{
-                    label{
-                        margin-left: 10px;
-                    }
-                    input{
-                        width: 50px;
+                    .slider-wrapper{
+                        margin-top: 10px;
                     }
                 }
             }

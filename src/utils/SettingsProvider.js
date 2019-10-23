@@ -26,6 +26,7 @@ class SettingsProvider extends Emitter{
                 }
             ]
         },
+
         gridSetterState: {
             type: "select",
             label: "Element to deploy",
@@ -45,6 +46,7 @@ class SettingsProvider extends Emitter{
                 }
             ]
         },
+
         heuristic: {
             type: "select",
             label: "Heuristic",
@@ -64,6 +66,7 @@ class SettingsProvider extends Emitter{
                 },
             ]
         },
+
         directions: {
             type: "select",
             label: "Allowed directions",
@@ -79,25 +82,33 @@ class SettingsProvider extends Emitter{
                 }
             ]
         },
+
         framerate: {
-            type: "number",
+            type: "slider",
             value: 50,
             label: "Framerate"
         },
+
         nodeSize: {
-            type: "number",
+            type: "slider",
             value: 50,
+            min: 10,
+            max: 150,
+            step: 10,
             label: "Node Size"
         },
+
         clearGrid: {
             type: "action",
             color: "secondary",
+            variant: "outlined",
             label: "Clear Grid"
         },
+
         searchPath: {
             type: "action",
             color: "primary",
-            variant: "outlined",
+            variant: "contained",
             label: "Search Path"
         },
     }
