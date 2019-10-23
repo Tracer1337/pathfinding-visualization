@@ -36,7 +36,7 @@ export default class Settings extends React.Component{
                     >{setting.label}</Button>
                 )
 
-            case "slider":
+            case "number":
                 return (
                     <>
                         <InputLabel>{setting.label}</InputLabel>
@@ -80,7 +80,7 @@ export default class Settings extends React.Component{
     componentDidMount(){
         let newState = {}
         Object.entries(SettingsProvider.settings).forEach(([key, setting]) => {
-            if(setting.type === "select" || setting.type === "slider"){
+            if(setting.type === "select" || setting.type === "number"){
                 newState[key] = setting.value
             }
         })

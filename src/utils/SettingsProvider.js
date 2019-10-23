@@ -84,13 +84,14 @@ class SettingsProvider extends Emitter{
         },
 
         framerate: {
-            type: "slider",
+            type: "number",
             value: 50,
+            step: 10,
             label: "Framerate"
         },
 
         nodeSize: {
-            type: "slider",
+            type: "number",
             value: 50,
             min: 10,
             max: 150,

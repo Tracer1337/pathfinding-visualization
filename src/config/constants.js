@@ -4,6 +4,7 @@ import Cross from "../assets/icons/highlight_off-24px.svg"
 export const DEBUG_MODE = false
 
 export const NODE_BORDER_WIDTH = 1
+export const MAX_WIDTH_FOR_LAYOUT_CHANGE = 700
 
 export const ROWS_CONSTRAINT = 50
 export const COLUMNS_CONSTRAINT = 50

@@ -1,13 +1,15 @@
 import React from "react"
 
 import {STATES} from "./config/constants.js"
+import Sidebar from "./components/Sidebar.js"
 import Grid from "./components/Grid.js"
 import Settings from "./components/Settings.js"
 import SettingsProvider from "./utils/SettingsProvider.js"
+import ScreenSizeTracker from "./utils/ScreenSizeTracker.js"
 import algorithms from "./algorithms/AlgorithmProvider.js"
 
 export default class App extends React.Component{
-    state = {}
+    state = {isSmall: ScreenSizeTracker.isSmall}
     grid = React.createRef()
 
     indexToCoords = index => [index%this.state.columns, Math.floor(index/this.state.columns)]
@@ -76,14 +78,15 @@ export default class App extends React.Component{
             rows: Math.floor(this.gridWrapper.clientHeight / SettingsProvider.settings.nodeSize.value)
         }))
         SettingsProvider.addEventListener("searchPath", this.calculatePath)
+        ScreenSizeTracker.addEventListener("onBoundaryPass", ({detail}) => this.setState({isSmall: detail.isSmall}))
     }
 
     render(){
         return(
-            <div className="app">
-                <aside className="sidebar">
+            <div className="app" style={{display: this.state.isSmall ? "block" : ""}}>
+                <Sidebar>
                     <Settings/>
-                </aside>
+                </Sidebar>
                 <main className="stage">
                     <div className="grid-wrapper" ref={ref => this.gridWrapper = ref}>
                         {this.state.columns && this.state.rows ? <Grid
