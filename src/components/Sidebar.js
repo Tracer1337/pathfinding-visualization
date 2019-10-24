@@ -19,7 +19,7 @@ export default class Sidebar extends React.Component{
             )
         }else{
             return(
-                <ExpansionPanel>
+                <ExpansionPanel className="expansion-panel">
                     <ExpansionPanelSummary>
                         <Typography>Menu</Typography>
                     </ExpansionPanelSummary>
