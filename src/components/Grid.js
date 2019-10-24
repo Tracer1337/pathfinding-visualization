@@ -9,8 +9,10 @@ export default class Grid extends React.Component{
     constructor(props){
         super(props)
         this.createNewGrid()
-        this.mode = STATES.BLOCKED
+        this.setterState = STATES.BLOCKED
         this.nodes = []
+        this.isMouseDown = false
+        this.firstSetterState = null
     }
 
     indexToCoords = index => [index%this.props.columns, Math.floor(index/this.props.columns)]
@@ -77,6 +79,7 @@ export default class Grid extends React.Component{
     setGridAtIndex(index, value){
         const coords = this.indexToCoords(index)
         this.grid[coords[1]][coords[0]] = value
+        this.nodes[index].set(value)
     }
 
     showPath = async path => {
@@ -87,19 +90,40 @@ export default class Grid extends React.Component{
         }
     }
 
-    handleClick = (index) => {
-        if(this.mode === STATES.START){
+    handleClick = (index, isMouseEnter = false) => {
+        const set = (index, state) => {
+            if(!isMouseEnter){
+                this.toggleGridAtIndex(index, state)
+            }else{
+                if(this.firstSetterState === null){
+                    this.firstSetterState = this.nodes[index].state.state === STATES.WALKABLE
+                }
+                if(this.firstSetterState){
+                    this.setGridAtIndex(index, state)
+                }else{
+                    this.setGridAtIndex(index, STATES.WALKABLE)
+                }
+            }
+        }
+
+        if(this.setterState === STATES.START){
             if(this.startingPoint){
-                this.toggleGridAtIndex(this.startingPoint, STATES.START)
+                set(this.startingPoint, STATES.START)
             }
             this.startingPoint = index
-        } else if(this.mode === STATES.END){
+        } else if(this.setterState === STATES.END){
             if(this.endingPoint){
-                this.toggleGridAtIndex(this.endingPoint, STATES.END)
+                set(this.endingPoint, STATES.END)
             }
             this.endingPoint = index
         }
-        this.toggleGridAtIndex(index, this.mode)
+        set(index, this.setterState)
+    }
+
+    handleMouseEnter = index => {
+        if(this.isMouseDown){
+            this.handleClick(index, true)
+        }
     }
 
     componentDidUpdate(){
@@ -108,7 +132,13 @@ export default class Grid extends React.Component{
     }
 
     componentDidMount(){
-        SettingsProvider.addEventListener("gridSetterStateChange", ({detail}) => this.mode = parseInt(detail))
+        document.addEventListener("mousedown", () => this.isMouseDown = true)
+        document.addEventListener("mouseup", () => {
+            this.firstSetterState = null
+            this.isMouseDown = false
+        })
+
+        SettingsProvider.addEventListener("gridSetterStateChange", ({detail}) => this.setterState = parseInt(detail))
         SettingsProvider.addEventListener("nodeSizeChange", () => this.forceUpdate())
         SettingsProvider.addEventListener("clearGrid", this.clearGrid)
 
@@ -119,13 +149,18 @@ export default class Grid extends React.Component{
     render(){
         this.createNewGrid()
         return(
-            <div className="grid" style={{width: this.props.columns*SettingsProvider.settings.nodeSize.value}}>
+            <div
+                className="grid"
+                ref={ref => this.gridRef = ref}
+                style={{width: this.props.columns*SettingsProvider.settings.nodeSize.value}}
+            >
                 {this.grid.flat().map((state, i) => (
                     <Node
                         state={state}
                         key={i}
                         onClick={() => this.handleClick(i)}
                         ref={ref => this.nodes[i] = ref}
+                        onMouseEnter={() => this.handleMouseEnter(i)}
                     >{DEBUG_MODE && `(${this.indexToCoords(i).join("|")})`}</Node>
                 ))}
             </div>

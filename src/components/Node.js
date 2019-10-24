@@ -6,6 +6,7 @@ export default class Node extends React.Component{
     state = {state: this.props.state}
 
     toggle = key => {
+        if(this.throttle) return
         if(this.state.state === key){
             this.setState({state: STATES.WALKABLE})
         }else{
@@ -50,7 +51,11 @@ export default class Node extends React.Component{
         }
 
         return(
-            <div className="node-border">
+            <div
+                className="node-border"
+                onMouseEnter={this.props.onMouseEnter}
+                onClick={this.props.onClick}
+            >
                 <div
                     className="node"
                     style={{
@@ -59,7 +64,6 @@ export default class Node extends React.Component{
                         backgroundImage,
                         backgroundColor
                     }}
-                    onClick={this.props.onClick}
                     ref={ref => this.node = ref}
                 >{this.props.children}</div>
             </div>

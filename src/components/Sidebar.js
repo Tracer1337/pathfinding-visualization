@@ -21,7 +21,7 @@ export default class Sidebar extends React.Component{
             return(
                 <ExpansionPanel className="expansion-panel">
                     <ExpansionPanelSummary>
-                        <Typography>Menu</Typography>
+                        <Typography>Settings</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                         {this.props.children}
