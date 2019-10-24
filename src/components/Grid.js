@@ -6,6 +6,8 @@ import SettingsProvider from "../utils/SettingsProvider.js"
 import sleep from "../utils/sleep.js"
 
 export default class Grid extends React.Component{
+    static draggableStates = [STATES.WALKABLE, STATES.BLOCKED]
+
     constructor(props){
         super(props)
         this.createNewGrid()
@@ -94,9 +96,9 @@ export default class Grid extends React.Component{
         const set = (index, state) => {
             if(!isMouseEnter){
                 this.toggleGridAtIndex(index, state)
-            }else{
+            }else if(Grid.draggableStates.includes(state)){
                 if(this.firstSetterState === null){
-                    this.firstSetterState = this.nodes[index].state.state === STATES.WALKABLE
+                    this.firstSetterState = this.nodes[index].state.state !== STATES.BLOCKED
                 }
                 if(this.firstSetterState){
                     this.setGridAtIndex(index, state)
@@ -132,7 +134,7 @@ export default class Grid extends React.Component{
     }
 
     componentDidMount(){
-        document.addEventListener("mousedown", () => this.isMouseDown = true)
+        document.addEventListener("mousedown", () => this.isMouseDown = true, true)
         document.addEventListener("mouseup", () => {
             this.firstSetterState = null
             this.isMouseDown = false

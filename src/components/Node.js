@@ -54,7 +54,7 @@ export default class Node extends React.Component{
             <div
                 className="node-border"
                 onMouseEnter={this.props.onMouseEnter}
-                onClick={this.props.onClick}
+                onMouseDown={this.props.onClick}
             >
                 <div
                     className="node"
