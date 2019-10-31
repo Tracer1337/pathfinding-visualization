@@ -22,7 +22,11 @@ export default class App extends React.Component{
 
     calculatePath = (instant = false) => {
         if(instant) this.grid.current.clearPath()
-        else this.grid.current.initNewPath()
+        else {
+            this.grid.current.initNewPath()
+            SettingsProvider.hide("searchPath")
+            SettingsProvider.show("pauseSearch")
+        }
 
         const grid = this.grid.current.grid
         const startingPoint = this.indexToCoords(this.grid.current.startingPoint)
@@ -37,6 +41,8 @@ export default class App extends React.Component{
 
         pathFinder.findPath().then(path => {
             pathFinder.removeEventListener("nextIteration", this.handleNextIteration)
+            SettingsProvider.show("searchPath")
+            SettingsProvider.hide("pauseSearch")
             if(path){
                 // Show final path
                 this.grid.current.showPath(path)
@@ -45,6 +51,16 @@ export default class App extends React.Component{
                 alert("There is no path")
             }
         })
+    }
+
+    handlePauseSearch = () => {
+        SettingsProvider.hide("pauseSearch")
+        SettingsProvider.show("continueSearch")
+    }
+
+    handleContinueSearch = () => {
+        SettingsProvider.hide("continueSearch")
+        SettingsProvider.show("pauseSearch")
     }
 
     handleRequestPath = () => {
@@ -76,6 +92,8 @@ export default class App extends React.Component{
         this.resetNodeSize()
         SettingsProvider.addEventListener("nodeSizeChange", this.resetNodeSize)
         SettingsProvider.addEventListener("searchPath", () => this.calculatePath())
+        SettingsProvider.addEventListener("pauseSearch", this.handlePauseSearch)
+        SettingsProvider.addEventListener("continueSearch", this.handleContinueSearch)
         ScreenSizeTracker.addEventListener("onBoundaryPass", ({detail}) => this.setState({isSmall: detail.isSmall}))
     }
 

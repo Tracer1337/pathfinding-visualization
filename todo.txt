@@ -1,3 +1,2 @@
-click again on search path will stop algorithm
 Three js visualization
 tutorial

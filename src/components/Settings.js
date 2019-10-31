@@ -84,13 +84,14 @@ export default class Settings extends React.Component{
                 newState[key] = setting.value
             }
         })
+        SettingsProvider.addEventListener("change", () => this.forceUpdate())
         this.setState(newState)
     }
 
     render(){
         return (
             <div className="settings">
-                {Object.keys(this.state).length && Object.keys(SettingsProvider.settings).map(key => (
+                {Object.keys(this.state).length && Object.keys(SettingsProvider.settings).map(key => !SettingsProvider.settings[key].hidden && (
                     <div className="input-wrapper" key={key}>
                         <FormControl className="input">
                             {this.getDOMElement(key)}

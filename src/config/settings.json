@@ -70,11 +70,27 @@
         "variant": "outlined",
         "label": "Clear Grid"
     },
-    
+
     "searchPath": {
         "type": "action",
         "color": "primary",
         "variant": "contained",
         "label": "Search Path"
+    },
+
+    "pauseSearch": {
+        "type": "action",
+        "color": "primary",
+        "variant": "contained",
+        "label": "Pause Search",
+        "hidden": "true"
+    },
+
+    "continueSearch": {
+        "type": "action",
+        "color": "primary",
+        "variant": "contained",
+        "label": "Continue Search",
+        "hidden": "true"
     }
 }

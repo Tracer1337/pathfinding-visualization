@@ -10,6 +10,16 @@ class SettingsProvider extends Emitter{
     }
 
     invoke = key => this.dispatchEvent(new CustomEvent(key))
+
+    hide = key => {
+        this.settings[key].hidden = true
+        this.dispatchEvent(new CustomEvent("change"))
+    }
+
+    show = key => {
+        this.settings[key].hidden = false
+        this.dispatchEvent(new CustomEvent("change"))
+    }
 }
 
 export default new SettingsProvider()

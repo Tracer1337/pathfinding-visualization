@@ -12,7 +12,12 @@ export default class BreadthFirst extends Emitter{
         this.queue = [this.startingPoint]
         this.discoveredList = [this.startingPoint]
         this.closedList = []
+
         this.instant = instant
+        this.playing = true
+
+        SettingsProvider.addEventListener("pauseSearch", () => this.playing = false)
+
         this.setDirections(0)
     }
 
@@ -66,7 +71,14 @@ export default class BreadthFirst extends Emitter{
                     newOpenListNodes: newDiscoveredNodes
                 }}))
 
-                await sleep(1/SettingsProvider.settings.framerate.value*1000)
+                if(!this.playing){
+                    await new Promise(resolve => SettingsProvider.addEventListener("continueSearch", () => {
+                        this.playing = true
+                        resolve()
+                    }))
+                }else{
+                    await sleep(1/SettingsProvider.settings.framerate.value*1000)
+                }
             }
         }
     }

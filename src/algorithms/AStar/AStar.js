@@ -22,6 +22,9 @@ export default class AStar extends Emitter{
         this.openList = [this.startNode]
         this.closedList = []
         this.instant = instant
+        this.playing = true
+
+        SettingsProvider.addEventListener("pauseSearch", () => this.playing = false)
 
         this.setHeuristic(0)
         this.setDirections(0)
@@ -114,7 +117,14 @@ export default class AStar extends Emitter{
                     newClosedListNode: this.closedList.length>1 && this.closedList[this.closedList.length-2]
                 }}))
 
-                await sleep(1/SettingsProvider.settings.framerate.value*1000)
+                if(!this.playing){
+                    await new Promise(resolve => SettingsProvider.addEventListener("continueSearch", () => {
+                        this.playing = true
+                        resolve()
+                    }))
+                }else{
+                    await sleep(1/SettingsProvider.settings.framerate.value*1000)
+                }
             }
         }
     }
