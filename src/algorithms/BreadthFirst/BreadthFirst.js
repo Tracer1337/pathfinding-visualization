@@ -5,13 +5,14 @@ import {Directions} from "../../config/constants.js"
 import Node from "./Node.js"
 
 export default class BreadthFirst extends Emitter{
-    constructor(start, end, grid){
+    constructor(start, end, grid, instant){
         super()
         this.startingPoint = new Node(...start)
         this.grid = JSON.parse(JSON.stringify(grid))
         this.queue = [this.startingPoint]
         this.discoveredList = [this.startingPoint]
         this.closedList = []
+        this.instant = instant
         this.setDirections(0)
     }
 
@@ -64,7 +65,9 @@ export default class BreadthFirst extends Emitter{
                 newOpenListNodes: newDiscoveredNodes
             }}))
 
-            await sleep(1/SettingsProvider.settings.framerate.value*1000)
+            if(!this.instant){
+                await sleep(1/SettingsProvider.settings.framerate.value*1000)
+            }
         }
     }
 }

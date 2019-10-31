@@ -18,6 +18,7 @@ export default class Grid extends React.Component{
         this.firstSetterState = null
         this.isMovingPoint = false
         this.isSettingPoints = false
+        this.isPathAvailable = false
     }
 
     /*
@@ -45,10 +46,9 @@ export default class Grid extends React.Component{
     */
     clearGrid = () => {
         if(this.nodes){
-            this.nodes.forEach(node => node && node.reset())
-            this.grid = this.grid.map(column => column.map(cell => cell = STATES.WALKABLE))
-            this.startingPoint = null
-            this.endingPoint = null
+            this.nodes.forEach(node => node && !Grid.protectedStates.includes(node.state.state) && node.reset())
+            this.grid = this.grid.map(column => column.map(cell => !Grid.protectedStates.includes(cell) ? cell = STATES.WALKABLE : cell))
+            this.isPathAvailable = false
         }
     }
 
@@ -124,8 +124,12 @@ export default class Grid extends React.Component{
             if(Grid.protectedStates.includes(this.grid[point[1]][point[0]])) continue
             this.grid[point[1]][point[0]] = 4
             this.nodes[this.coordsToIndex({x:point[0], y:point[1]})].set(STATES.PATH)
-            await sleep(1/SettingsProvider.settings.framerate.value*1000)
+            // If there is already an path, show the new one instantly
+            if(!this.isPathAvailable){
+                await sleep(1/SettingsProvider.settings.framerate.value*1000)
+            }
         }
+        this.isPathAvailable = true
     }
 
     /*
@@ -169,6 +173,13 @@ export default class Grid extends React.Component{
                     if(this.movingState === STATES.START) this.startingPoint = index
                     else if(this.movingState === STATES.END) this.endingPoint = index
 
+                    /*
+                    * Change the path, when the user moves the start / end node
+                    * and there is already a path
+                    */
+                    if(this.isPathAvailable){
+                        this.props.onRequestPath()
+                    }
                     move(this.lastIndex, index, this.movingState)
                     this.lastIndex = index
                 }

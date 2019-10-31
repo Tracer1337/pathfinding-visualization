@@ -15,6 +15,36 @@ export default class App extends React.Component{
     indexToCoords = index => [index%this.state.columns, Math.floor(index/this.state.columns)]
     coordsToIndex = ({x,y}) => y*this.state.columns+x
 
+    calculatePath = (instant = false) => {
+        this.grid.current.initNewPath()
+
+        const grid = this.grid.current.grid
+        const startingPoint = this.indexToCoords(this.grid.current.startingPoint)
+        const endingPoint = this.indexToCoords(this.grid.current.endingPoint)
+
+        let pathFinder = new algorithms[SettingsProvider.settings.algorithm.value](startingPoint, endingPoint, grid, instant)
+
+        if(pathFinder.setHeuristic)
+            pathFinder.setHeuristic(SettingsProvider.settings.heuristic.value)
+        pathFinder.setDirections(SettingsProvider.settings.directions.value)
+        pathFinder.addEventListener("nextIteration", this.handleNextIteration)
+
+        pathFinder.findPath().then(path => {
+            pathFinder.removeEventListener("nextIteration", this.handleNextIteration)
+            if(path){
+                // Show final path
+                this.grid.current.showPath(path)
+            }else{
+                // No path found
+                alert("There is no path")
+            }
+        })
+    }
+
+    handleRequestPath = () => {
+        this.calculatePath(true)
+    }
+
     handleNextIteration = ({detail}) => {
         const {newOpenListNodes, newClosedListNode} = detail
 
@@ -36,32 +66,6 @@ export default class App extends React.Component{
         }
     }
 
-    calculatePath = () => {
-        this.grid.current.initNewPath()
-
-        const grid = this.grid.current.grid
-        const startingPoint = this.indexToCoords(this.grid.current.startingPoint)
-        const endingPoint = this.indexToCoords(this.grid.current.endingPoint)
-
-        let pathFinder = new algorithms[SettingsProvider.settings.algorithm.value](startingPoint, endingPoint, grid)
-
-        if(pathFinder.setHeuristic)
-            pathFinder.setHeuristic(SettingsProvider.settings.heuristic.value)
-        pathFinder.setDirections(SettingsProvider.settings.directions.value)
-        pathFinder.addEventListener("nextIteration", this.handleNextIteration)
-
-        pathFinder.findPath().then(path => {
-            pathFinder.removeEventListener("nextIteration", this.handleNextIteration)
-            if(path){
-                // Show final path
-                this.grid.current.showPath(path)
-            }else{
-                // No path found
-                alert("There is no path")
-            }
-        })
-    }
-
     componentDidMount(){
         this.setState({
             columns: Math.floor(this.gridWrapper.clientWidth / SettingsProvider.settings.nodeSize.value),
@@ -71,7 +75,7 @@ export default class App extends React.Component{
             columns: Math.floor(this.gridWrapper.clientWidth / SettingsProvider.settings.nodeSize.value),
             rows: Math.floor(this.gridWrapper.clientHeight / SettingsProvider.settings.nodeSize.value)
         }))
-        SettingsProvider.addEventListener("searchPath", this.calculatePath)
+        SettingsProvider.addEventListener("searchPath", () => this.calculatePath())
         ScreenSizeTracker.addEventListener("onBoundaryPass", ({detail}) => this.setState({isSmall: detail.isSmall}))
     }
 
@@ -87,6 +91,7 @@ export default class App extends React.Component{
                             columns={this.state.columns}
                             rows={this.state.rows}
                             ref={this.grid}
+                            onRequestPath={this.handleRequestPath}
                         /> : null}
                     </div>
                 </main>

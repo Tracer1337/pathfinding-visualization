@@ -14,13 +14,14 @@ export default class AStar extends Emitter{
         (currentNode, endNode) => ((currentNode.x-endNode.x)**2+(currentNode.y-endNode.y)**2)**(1/2)
     ]
 
-    constructor(start, end, grid){
+    constructor(start, end, grid, instant){
         super()
         this.startNode = new Node(...start)
         this.endNode = new Node(...end)
         this.grid = JSON.parse(JSON.stringify(grid))
         this.openList = [this.startNode]
         this.closedList = []
+        this.instant = instant
 
         this.setHeuristic(0)
         this.setDirections(0)
@@ -112,7 +113,9 @@ export default class AStar extends Emitter{
                 newClosedListNode: this.closedList.length>1 && this.closedList[this.closedList.length-2]
             }}))
 
-            await sleep(1/SettingsProvider.settings.framerate.value*1000)
+            if(!this.instant){
+                await sleep(1/SettingsProvider.settings.framerate.value*1000)
+            }
         }
     }
 }

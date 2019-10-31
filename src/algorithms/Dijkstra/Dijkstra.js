@@ -5,7 +5,7 @@ import {Directions} from "../../config/constants.js"
 import Node from "./Node.js"
 
 export default class Dijkstra extends Emitter{
-    constructor(start, end, grid){
+    constructor(start, end, grid, instant){
         super()
         this.startNode = new Node(...start)
         this.startNode.setDistance(0)
@@ -14,11 +14,11 @@ export default class Dijkstra extends Emitter{
         this.openList = [this.startNode]
         this.closedList = []
         this.grid = JSON.parse(JSON.stringify(grid))
-        console.log(this.grid)
+        this.instant = instant
 
         this.setDirections(1)
     }
-    
+
     setDirections = directionsNr => this.directions = Directions[directionsNr]
 
     // Find the same node in the open list and return it and its index
@@ -40,7 +40,7 @@ export default class Dijkstra extends Emitter{
             // Move current node from openList to closedList
             this.openList.shift()
             this.closedList.push(currentNode)
-            console.log(currentNode, this.grid[currentNode.y][currentNode.x])
+
             // Found the end node
             if(this.grid[currentNode.y][currentNode.x] === 3){
                 let path = []
@@ -103,7 +103,9 @@ export default class Dijkstra extends Emitter{
                 newClosedListNode: this.closedList.length>1 && this.closedList[this.closedList.length-2]
             }}))
 
-            await sleep(1/SettingsProvider.settings.framerate.value*1000)
+            if(!this.instant){
+                await sleep(1/SettingsProvider.settings.framerate.value*1000)
+            }
         }
     }
 }
