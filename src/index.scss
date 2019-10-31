@@ -59,6 +59,16 @@ body{
         .sidebar{
             width: 250px;
             height: 100%;
+
+            .title{
+                text-align: center;
+            }
+        }
+
+        .expansion-panel{
+            .drop-down{
+                width: 24px;
+            }
         }
 
         .sidebar, .expansion-panel{
