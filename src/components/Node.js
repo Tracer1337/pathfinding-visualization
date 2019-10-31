@@ -5,20 +5,22 @@ import SettingsProvider from "../utils/SettingsProvider.js"
 export default class Node extends React.Component{
     state = {state: this.props.state}
 
-    toggle = key => {
+    toggle = state => {
         if(this.throttle) return
-        if(this.state.state === key){
+        if(this.state.state === state){
             this.setState({state: STATES.WALKABLE})
         }else{
-            this.setState({state: key})
+            this.setState({state})
         }
     }
 
-    set = key => {
+    set = state => {
         if(this.state.state !== STATES.START && this.state.state !== STATES.END){
-            this.setState({state: key})
+            this.setState({state})
         }
     }
+
+    force = state => this.setState({state})
 
     reset = () => this.setState({state: STATES.WALKABLE})
 

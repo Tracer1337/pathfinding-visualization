@@ -107,13 +107,13 @@ export default class AStar extends Emitter{
             }
 
             // Visualization bridge
-            this.dispatchEvent(new CustomEvent("nextIteration", {detail: {
-                currentNode,
-                newOpenListNodes,
-                newClosedListNode: this.closedList.length>1 && this.closedList[this.closedList.length-2]
-            }}))
-
             if(!this.instant){
+                this.dispatchEvent(new CustomEvent("nextIteration", {detail: {
+                    currentNode,
+                    newOpenListNodes,
+                    newClosedListNode: this.closedList.length>1 && this.closedList[this.closedList.length-2]
+                }}))
+                
                 await sleep(1/SettingsProvider.settings.framerate.value*1000)
             }
         }

@@ -35,7 +35,9 @@ export default class Grid extends React.Component{
     * Create a new grid with all nodes set to walkable
     */
     createNewGrid = () => {
-        this.clearGrid()
+        if(this.nodes)
+            this.nodes.forEach(node => node && node.reset())
+        this.isPathAvailable = false
         const rows = Math.min(this.props.rows, ROWS_CONSTRAINT)
         const columns = Math.min(this.props.columns, COLUMNS_CONSTRAINT)
         this.grid = Array(rows).fill(0).map(() => Array(columns).fill(STATES.WALKABLE))
@@ -55,7 +57,7 @@ export default class Grid extends React.Component{
     /*
     * Reset all nodes which were modified during the pathfinding
     */
-    initNewPath = () => {
+    clearPath = () => {
         const shouldReset = [STATES.PATH, STATES.CURRENT, STATES.OPEN, STATES.CLOSED]
         this.grid = this.grid.map((column, y) => column.map(((cell, x) => {
             const index = this.coordsToIndex({x,y})
@@ -69,6 +71,14 @@ export default class Grid extends React.Component{
             }
             return cell
         })))
+    }
+
+    /*
+    * Reset isPathAvailable => New path should be animated
+    */
+    initNewPath = () => {
+        this.isPathAvailable = false
+        this.clearPath()
     }
 
     /*
@@ -117,6 +127,15 @@ export default class Grid extends React.Component{
     }
 
     /*
+    * Force the grid at index to apply state
+    */
+    forceGridAtIndex(index, state){
+        const coords = this.indexToCoords(index)
+        this.grid[coords[1]][coords[0]] = state
+        this.nodes[index].force(state)
+    }
+
+    /*
     * Animate the provided path
     */
     showPath = async path => {
@@ -154,8 +173,8 @@ export default class Grid extends React.Component{
 
         const move = (fromIndex, toIndex, state) => {
             if(fromIndex === toIndex) return
-            this.toggleGridAtIndex(fromIndex, STATES.WALKABLE)
-            this.toggleGridAtIndex(toIndex, state)
+            this.forceGridAtIndex(fromIndex, STATES.WALKABLE)
+            this.forceGridAtIndex(toIndex, state)
         }
 
         const coords = this.indexToCoords(index)
@@ -169,7 +188,11 @@ export default class Grid extends React.Component{
                 }
 
                 // Only move node if it won't override an other important node
-                if(this.lastIndex && !Grid.protectedStates.includes(gridState)){
+                if(
+                    this.lastIndex &&
+                    !Grid.protectedStates.includes(gridState) &&
+                    !(this.isPathAvailable && gridState === STATES.BLOCKED)
+                ){
                     if(this.movingState === STATES.START) this.startingPoint = index
                     else if(this.movingState === STATES.END) this.endingPoint = index
 

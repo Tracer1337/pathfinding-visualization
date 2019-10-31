@@ -16,7 +16,8 @@ export default class App extends React.Component{
     coordsToIndex = ({x,y}) => y*this.state.columns+x
 
     calculatePath = (instant = false) => {
-        this.grid.current.initNewPath()
+        if(instant) this.grid.current.clearPath()
+        else this.grid.current.initNewPath()
 
         const grid = this.grid.current.grid
         const startingPoint = this.indexToCoords(this.grid.current.startingPoint)

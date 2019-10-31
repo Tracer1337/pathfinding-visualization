@@ -60,12 +60,12 @@ export default class DepthFirst extends Emitter{
             }
 
             // Visualization bridge
-            this.dispatchEvent(new CustomEvent("nextIteration", {detail: {
-                newClosedListNode: currentNode,
-                newOpenListNodes: newDiscoveredNodes
-            }}))
-
             if(!this.instant){
+                this.dispatchEvent(new CustomEvent("nextIteration", {detail: {
+                    newClosedListNode: currentNode,
+                    newOpenListNodes: newDiscoveredNodes
+                }}))
+
                 await sleep(1/SettingsProvider.settings.framerate.value*1000)
             }
         }
