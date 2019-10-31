@@ -12,6 +12,11 @@ export default class App extends React.Component{
     state = {isSmall: ScreenSizeTracker.isSmall}
     grid = React.createRef()
 
+    resetNodeSize = () => this.setState({
+        columns: Math.floor(this.gridWrapper.clientWidth / SettingsProvider.settings.nodeSize.value),
+        rows: Math.floor(this.gridWrapper.clientHeight / SettingsProvider.settings.nodeSize.value)
+    })
+
     indexToCoords = index => [index%this.state.columns, Math.floor(index/this.state.columns)]
     coordsToIndex = ({x,y}) => y*this.state.columns+x
 
@@ -68,14 +73,8 @@ export default class App extends React.Component{
     }
 
     componentDidMount(){
-        this.setState({
-            columns: Math.floor(this.gridWrapper.clientWidth / SettingsProvider.settings.nodeSize.value),
-            rows: Math.floor(this.gridWrapper.clientHeight / SettingsProvider.settings.nodeSize.value)
-        })
-        SettingsProvider.addEventListener("nodeSizeChange", () => this.setState({
-            columns: Math.floor(this.gridWrapper.clientWidth / SettingsProvider.settings.nodeSize.value),
-            rows: Math.floor(this.gridWrapper.clientHeight / SettingsProvider.settings.nodeSize.value)
-        }))
+        this.resetNodeSize()
+        SettingsProvider.addEventListener("nodeSizeChange", this.resetNodeSize)
         SettingsProvider.addEventListener("searchPath", () => this.calculatePath())
         ScreenSizeTracker.addEventListener("onBoundaryPass", ({detail}) => this.setState({isSmall: detail.isSmall}))
     }
