@@ -7,7 +7,7 @@ import sleep from "../utils/sleep.js"
 
 export default class Grid extends React.Component{
     static draggableStates = [STATES.WALKABLE, STATES.BLOCKED]
-    static overrideableStates = [STATES.WALKABLE, STATES.BLOCKED]
+    static protectedStates = [STATES.START, STATES.END]
 
     constructor(props){
         super(props)
@@ -121,6 +121,7 @@ export default class Grid extends React.Component{
     */
     showPath = async path => {
         for(let point of path){
+            if(Grid.protectedStates.includes(this.grid[point[1]][point[0]])) continue
             this.grid[point[1]][point[0]] = 4
             this.nodes[this.coordsToIndex({x:point[0], y:point[1]})].set(STATES.PATH)
             await sleep(1/SettingsProvider.settings.framerate.value*1000)
@@ -135,7 +136,7 @@ export default class Grid extends React.Component{
         const set = (index, state) => {
             if(!isMouseEnter){
                 this.toggleGridAtIndex(index, state)
-            }else if(Grid.draggableStates.includes(state) && Grid.overrideableStates.includes(gridState)){
+            }else if(Grid.draggableStates.includes(state) && !Grid.protectedStates.includes(gridState)){
                 if(this.firstSetterState === null){
                     this.firstSetterState = this.nodes[index].state.state !== STATES.BLOCKED
                 }
@@ -164,7 +165,7 @@ export default class Grid extends React.Component{
                 }
 
                 // Only move node if it won't override an other important node
-                if(this.lastIndex && Grid.overrideableStates.includes(gridState)){
+                if(this.lastIndex && !Grid.protectedStates.includes(gridState)){
                     if(this.movingState === STATES.START) this.startingPoint = index
                     else if(this.movingState === STATES.END) this.endingPoint = index
 

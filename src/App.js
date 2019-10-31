@@ -18,15 +18,10 @@ export default class App extends React.Component{
     handleNextIteration = ({detail}) => {
         const {newOpenListNodes, newClosedListNode} = detail
 
-        // Show currentNode
-        // if(detail.currentNode){
-        //     const currentNodeIndex = this.coordsToIndex(detail.currentNode)
-        //     this.grid.current.nodes[currentNodeIndex].set("CURRENT")
-        // }
-
         // Show new openlist nodes
         if(newOpenListNodes){
             for(let openNode of newOpenListNodes){
+                if(Grid.protectedStates.includes(this.grid.current.grid[openNode.y][openNode.x])) continue
                 const openNodeIndex = this.coordsToIndex(openNode)
                 this.grid.current.nodes[openNodeIndex].set(STATES.OPEN)
                 this.grid.current.setGridAtIndex(openNodeIndex, STATES.OPEN)
@@ -34,7 +29,7 @@ export default class App extends React.Component{
         }
 
         // Show new closed list node
-        if(newClosedListNode){
+        if(newClosedListNode && !Grid.protectedStates.includes(this.grid.current.grid[newClosedListNode.y][newClosedListNode.x])){
             const closedNodeIndex = this.coordsToIndex(newClosedListNode)
             this.grid.current.nodes[closedNodeIndex].set(STATES.CLOSED)
             this.grid.current.setGridAtIndex(closedNodeIndex, STATES.CLOSED)
@@ -53,7 +48,6 @@ export default class App extends React.Component{
         if(pathFinder.setHeuristic)
             pathFinder.setHeuristic(SettingsProvider.settings.heuristic.value)
         pathFinder.setDirections(SettingsProvider.settings.directions.value)
-        pathFinder.setFramerate(SettingsProvider.settings.framerate.value)
         pathFinder.addEventListener("nextIteration", this.handleNextIteration)
 
         pathFinder.findPath().then(path => {

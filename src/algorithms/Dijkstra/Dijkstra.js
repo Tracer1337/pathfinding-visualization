@@ -1,5 +1,6 @@
 import Emitter from "../../utils/Emitter.js"
 import sleep from "../../utils/sleep.js"
+import SettingsProvider from "../../utils/SettingsProvider.js"
 import {Directions} from "../../config/constants.js"
 import Node from "./Node.js"
 
@@ -17,8 +18,7 @@ export default class Dijkstra extends Emitter{
 
         this.setDirections(1)
     }
-
-    setFramerate = framerate => this.framerate = framerate
+    
     setDirections = directionsNr => this.directions = Directions[directionsNr]
 
     // Find the same node in the open list and return it and its index
@@ -103,9 +103,7 @@ export default class Dijkstra extends Emitter{
                 newClosedListNode: this.closedList.length>1 && this.closedList[this.closedList.length-2]
             }}))
 
-            if(this.framerate){
-                await sleep(1/this.framerate*1000)
-            }
+            await sleep(1/SettingsProvider.settings.framerate.value*1000)
         }
     }
 }

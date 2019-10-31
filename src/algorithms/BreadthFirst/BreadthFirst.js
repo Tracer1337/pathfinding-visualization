@@ -1,5 +1,6 @@
 import Emitter from "../../utils/Emitter.js"
 import sleep from "../../utils/sleep.js"
+import SettingsProvider from "../../utils/SettingsProvider.js"
 import {Directions} from "../../config/constants.js"
 import Node from "./Node.js"
 
@@ -14,7 +15,6 @@ export default class BreadthFirst extends Emitter{
         this.setDirections(0)
     }
 
-    setFramerate = framerate => this.framerate = framerate
     setDirections = directionsNr => this.directions = Directions[directionsNr]
 
     isDiscovered = node => this.discoveredList.some(e => e.equal(node))
@@ -64,9 +64,7 @@ export default class BreadthFirst extends Emitter{
                 newOpenListNodes: newDiscoveredNodes
             }}))
 
-            if(this.framerate){
-                await sleep(1/this.framerate*1000)
-            }
+            await sleep(1/SettingsProvider.settings.framerate.value*1000)
         }
     }
 }

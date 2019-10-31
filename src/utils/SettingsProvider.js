@@ -87,6 +87,7 @@ class SettingsProvider extends Emitter{
             type: "number",
             value: 50,
             step: 10,
+            min: 1,
             label: "Framerate"
         },
 
