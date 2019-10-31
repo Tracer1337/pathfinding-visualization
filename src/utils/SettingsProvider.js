@@ -27,26 +27,6 @@ class SettingsProvider extends Emitter{
             ]
         },
 
-        gridSetterState: {
-            type: "select",
-            label: "Element to deploy",
-            value: STATES.BLOCKED,
-            options: [
-                {
-                    label: "Wall",
-                    value: STATES.BLOCKED
-                },
-                {
-                    label: "Start",
-                    value: STATES.START
-                },
-                {
-                    label: "End",
-                    value: STATES.END
-                }
-            ]
-        },
-
         heuristic: {
             type: "select",
             label: "Heuristic",

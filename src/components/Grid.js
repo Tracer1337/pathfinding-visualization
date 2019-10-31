@@ -240,7 +240,6 @@ export default class Grid extends React.Component{
             this.isSettingPoints = false
         })
 
-        SettingsProvider.addEventListener("gridSetterStateChange", ({detail}) => this.setterState = parseInt(detail))
         SettingsProvider.addEventListener("nodeSizeChange", () => this.forceUpdate())
         SettingsProvider.addEventListener("clearGrid", this.clearGrid)
 

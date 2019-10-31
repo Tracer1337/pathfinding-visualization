@@ -18,7 +18,7 @@ export default class AStar extends Emitter{
         super()
         this.startNode = new Node(...start)
         this.endNode = new Node(...end)
-        this.grid = JSON.parse(JSON.stringify(grid))
+        this.grid = grid
         this.openList = [this.startNode]
         this.closedList = []
         this.instant = instant
@@ -113,7 +113,7 @@ export default class AStar extends Emitter{
                     newOpenListNodes,
                     newClosedListNode: this.closedList.length>1 && this.closedList[this.closedList.length-2]
                 }}))
-                
+
                 await sleep(1/SettingsProvider.settings.framerate.value*1000)
             }
         }

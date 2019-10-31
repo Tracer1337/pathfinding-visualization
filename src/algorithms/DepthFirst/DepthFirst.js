@@ -8,7 +8,7 @@ export default class DepthFirst extends Emitter{
     constructor(start, end, grid, instant){
         super()
         this.startingPoint = new Node(...start)
-        this.grid = JSON.parse(JSON.stringify(grid))
+        this.grid = grid
         this.stack = [this.startingPoint]
         this.discoveredList = [this.startingPoint]
         this.closedList = []

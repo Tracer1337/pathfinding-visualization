@@ -13,7 +13,7 @@ export default class Dijkstra extends Emitter{
         this.priorityQueue = []
         this.openList = [this.startNode]
         this.closedList = []
-        this.grid = JSON.parse(JSON.stringify(grid))
+        this.grid = grid
         this.instant = instant
 
         this.setDirections(1)
