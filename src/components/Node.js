@@ -1,5 +1,5 @@
 import React from "react"
-import {STATES, BACKGROUNDS, NODE_BORDER_WIDTH} from "../config/constants.js"
+import {STATES, BACKGROUNDS, NODE_BORDER_WIDTH, CURSOR_POINTER_STATES} from "../config/constants.js"
 import SettingsProvider from "../utils/SettingsProvider.js"
 
 export default class Node extends React.Component{
@@ -62,7 +62,8 @@ export default class Node extends React.Component{
                         width: SettingsProvider.settings.nodeSize.value-NODE_BORDER_WIDTH*2+"px",
                         height: SettingsProvider.settings.nodeSize.value-NODE_BORDER_WIDTH*2+"px",
                         backgroundImage,
-                        backgroundColor
+                        backgroundColor,
+                        cursor: CURSOR_POINTER_STATES.includes(this.state.state) && "pointer"
                     }}
                     ref={ref => this.node = ref}
                 >{this.props.children}</div>

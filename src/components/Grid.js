@@ -7,6 +7,7 @@ import sleep from "../utils/sleep.js"
 
 export default class Grid extends React.Component{
     static draggableStates = [STATES.WALKABLE, STATES.BLOCKED]
+    static overrideableStates = [STATES.WALKABLE, STATES.BLOCKED]
 
     constructor(props){
         super(props)
@@ -15,11 +16,23 @@ export default class Grid extends React.Component{
         this.nodes = []
         this.isMouseDown = false
         this.firstSetterState = null
+        this.isMovingPoint = false
+        this.isSettingPoints = false
     }
 
+    /*
+    * Convert index of node to coordinates on the grid
+    */
     indexToCoords = index => [index%this.props.columns, Math.floor(index/this.props.columns)]
+
+    /*
+    * Convert coordinates on the grid to index of node
+    */
     coordsToIndex = ({x,y}) => y*this.props.columns+x
 
+    /*
+    * Create a new grid with all nodes set to walkable
+    */
     createNewGrid = () => {
         this.clearGrid()
         const rows = Math.min(this.props.rows, ROWS_CONSTRAINT)
@@ -27,6 +40,9 @@ export default class Grid extends React.Component{
         this.grid = Array(rows).fill(0).map(() => Array(columns).fill(STATES.WALKABLE))
     }
 
+    /*
+    * Set all nodes to walkable and remove the start & end point
+    */
     clearGrid = () => {
         if(this.nodes){
             this.nodes.forEach(node => node && node.reset())
@@ -36,6 +52,9 @@ export default class Grid extends React.Component{
         }
     }
 
+    /*
+    * Reset all nodes which were modified during the pathfinding
+    */
     initNewPath = () => {
         const shouldReset = [STATES.PATH, STATES.CURRENT, STATES.OPEN, STATES.CLOSED]
         this.grid = this.grid.map((column, y) => column.map(((cell, x) => {
@@ -52,6 +71,9 @@ export default class Grid extends React.Component{
         })))
     }
 
+    /*
+    * Set the starting point to be at y: middle and x: 20%
+    */
     generateStartingPoint = () => {
         if(this.props.columns > COLUMNS_CONSTRAINT || this.props.rows > ROWS_CONSTRAINT) return
         const x = Math.floor(this.props.columns*.2)
@@ -60,6 +82,9 @@ export default class Grid extends React.Component{
         this.toggleGridAtIndex(this.startingPoint, STATES.START)
     }
 
+    /*
+    * Set the ending point to be at y: middle and x: 80%
+    */
     generateEndingPoint = () => {
         if(this.props.columns > COLUMNS_CONSTRAINT || this.props.rows > ROWS_CONSTRAINT) return
         const x = Math.floor(this.props.columns*.8)
@@ -68,6 +93,10 @@ export default class Grid extends React.Component{
         this.toggleGridAtIndex(this.endingPoint, STATES.END)
     }
 
+    /*
+    * Set the node at index to the given state if it's not already, otherwise
+    * set it to walkable
+    */
     toggleGridAtIndex(index, value){
         const coords = this.indexToCoords(index)
         this.nodes[index].toggle(value)
@@ -78,12 +107,18 @@ export default class Grid extends React.Component{
         }
     }
 
+    /*
+    * Set the grid at index to the given state
+    */
     setGridAtIndex(index, value){
         const coords = this.indexToCoords(index)
         this.grid[coords[1]][coords[0]] = value
         this.nodes[index].set(value)
     }
 
+    /*
+    * Animate the provided path
+    */
     showPath = async path => {
         for(let point of path){
             this.grid[point[1]][point[0]] = 4
@@ -92,11 +127,15 @@ export default class Grid extends React.Component{
         }
     }
 
+    /*
+    * Handle click / mouseenter event from nodes
+    * Move the starting / ending node or set walls etc.
+    */
     handleClick = (index, isMouseEnter = false) => {
         const set = (index, state) => {
             if(!isMouseEnter){
                 this.toggleGridAtIndex(index, state)
-            }else if(Grid.draggableStates.includes(state)){
+            }else if(Grid.draggableStates.includes(state) && Grid.overrideableStates.includes(gridState)){
                 if(this.firstSetterState === null){
                     this.firstSetterState = this.nodes[index].state.state !== STATES.BLOCKED
                 }
@@ -108,20 +147,42 @@ export default class Grid extends React.Component{
             }
         }
 
-        if(this.setterState === STATES.START){
-            if(this.startingPoint){
-                set(this.startingPoint, STATES.START)
-            }
-            this.startingPoint = index
-        } else if(this.setterState === STATES.END){
-            if(this.endingPoint){
-                set(this.endingPoint, STATES.END)
-            }
-            this.endingPoint = index
+        const move = (fromIndex, toIndex, state) => {
+            if(fromIndex === toIndex) return
+            this.toggleGridAtIndex(fromIndex, STATES.WALKABLE)
+            this.toggleGridAtIndex(toIndex, state)
         }
-        set(index, this.setterState)
+
+        const coords = this.indexToCoords(index)
+        const gridState = this.grid[coords[1]][coords[0]]
+        if(!this.isSettingPoints){
+            if(gridState === STATES.START || gridState === STATES.END || this.isMovingPoint){
+                if(!this.isMovingPoint){
+                    this.isMovingPoint = true
+                    this.movingState = gridState
+                    this.lastIndex = index
+                }
+
+                // Only move node if it won't override an other important node
+                if(this.lastIndex && Grid.overrideableStates.includes(gridState)){
+                    if(this.movingState === STATES.START) this.startingPoint = index
+                    else if(this.movingState === STATES.END) this.endingPoint = index
+
+                    move(this.lastIndex, index, this.movingState)
+                    this.lastIndex = index
+                }
+            }
+        }
+
+        if(!this.isMovingPoint){
+            this.isSettingPoints = true
+            set(index, this.setterState)
+        }
     }
 
+    /*
+    * Treat the mouseenter event from node as an click event
+    */
     handleMouseEnter = index => {
         if(this.isMouseDown){
             this.handleClick(index, true)
@@ -137,7 +198,11 @@ export default class Grid extends React.Component{
         document.addEventListener("mousedown", () => this.isMouseDown = true, true)
         document.addEventListener("mouseup", () => {
             this.firstSetterState = null
+            this.movingState = null
+            this.lastIndex = null
             this.isMouseDown = false
+            this.isMovingPoint = false
+            this.isSettingPoints = false
         })
 
         SettingsProvider.addEventListener("gridSetterStateChange", ({detail}) => this.setterState = parseInt(detail))

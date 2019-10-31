@@ -34,6 +34,11 @@ export const BACKGROUNDS = {
     [STATES.CLOSED]: Color("#16a085")
 }
 
+export const CURSOR_POINTER_STATES = [
+    STATES.START,
+    STATES.END
+]
+
 export const Directions = [
     // Up, Down, Left, Right
     [
