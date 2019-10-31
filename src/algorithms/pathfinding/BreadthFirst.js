@@ -1,6 +1,6 @@
-import Algorithm from "./Algorithm.js"
+import PathfindingAlgorithm from "../PathfindingAlgorithm.js"
 
-export default class BreadthFirst extends Algorithm{
+export default class BreadthFirst extends PathfindingAlgorithm{
     async findPath(){
         while(this.openList.length){
             // Get and remove the node at the top of the openList

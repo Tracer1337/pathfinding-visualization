@@ -6,6 +6,7 @@ import Grid from "./components/Grid.js"
 import Settings from "./components/Settings.js"
 import SettingsProvider from "./utils/SettingsProvider.js"
 import ScreenSizeTracker from "./utils/ScreenSizeTracker.js"
+import sleep from "./utils/sleep.js"
 import algorithms from "./algorithms"
 
 export default class App extends React.Component{
@@ -37,10 +38,17 @@ export default class App extends React.Component{
         if(pathFinder.setHeuristic)
             pathFinder.setHeuristic(SettingsProvider.settings.heuristic.value)
         pathFinder.setDirections(SettingsProvider.settings.directions.value)
-        pathFinder.addEventListener("nextIteration", this.handleNextIteration)
+        const iterations = []
+        const handleNextIteration = ({detail}) => iterations.push(detail)
+        pathFinder.addEventListener("nextIteration", handleNextIteration)
 
-        pathFinder.findPath().then(path => {
-            pathFinder.removeEventListener("nextIteration", this.handleNextIteration)
+        pathFinder.findPath().then(async path => {
+            pathFinder.removeEventListener("nextIteration", handleNextIteration)
+            for(let iteration of iterations){
+                this.handleNextIteration(iteration)
+                await sleep(1/SettingsProvider.settings.framerate.value*1000)
+            }
+
             SettingsProvider.show("searchPath")
             SettingsProvider.hide("pauseSearch")
             if(path){
@@ -67,15 +75,12 @@ export default class App extends React.Component{
         this.calculatePath(true)
     }
 
-    handleNextIteration = ({detail}) => {
-        const {newOpenListNodes, newClosedListNode} = detail
-
+    handleNextIteration = ({newOpenListNodes, newClosedListNode}) => {
         // Show new openlist nodes
         if(newOpenListNodes){
             for(let openNode of newOpenListNodes){
                 if(Grid.protectedStates.includes(this.grid.current.grid[openNode.y][openNode.x])) continue
                 const openNodeIndex = this.coordsToIndex(openNode)
-                this.grid.current.nodes[openNodeIndex].set(STATES.OPEN)
                 this.grid.current.setGridAtIndex(openNodeIndex, STATES.OPEN)
             }
         }
@@ -83,7 +88,6 @@ export default class App extends React.Component{
         // Show new closed list node
         if(newClosedListNode && !Grid.protectedStates.includes(this.grid.current.grid[newClosedListNode.y][newClosedListNode.x])){
             const closedNodeIndex = this.coordsToIndex(newClosedListNode)
-            this.grid.current.nodes[closedNodeIndex].set(STATES.CLOSED)
             this.grid.current.setGridAtIndex(closedNodeIndex, STATES.CLOSED)
         }
     }

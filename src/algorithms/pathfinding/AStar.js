@@ -1,6 +1,6 @@
-import Algorithm from "./Algorithm.js"
+import PathfindingAlgorithm from "../PathfindingAlgorithm.js"
 
-export default class AStar extends Algorithm{
+export default class AStar extends PathfindingAlgorithm{
     async findPath(){
         while(this.openList.length){
             // Get the node with the least f value

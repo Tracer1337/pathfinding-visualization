@@ -49,9 +49,10 @@
 
     "framerate": {
         "type": "number",
-        "value": 50,
+        "value": 100,
         "step": 10,
         "min": 1,
+        "max": 200,
         "label": "Framerate"
     },
 
@@ -62,6 +63,13 @@
         "max": 150,
         "step": 10,
         "label": "Node Size"
+    },
+
+    "generateMaze": {
+        "type": "action",
+        "color": "secondary",
+        "variant": "outlined",
+        "label": "Generate Maze"
     },
 
     "clearGrid": {

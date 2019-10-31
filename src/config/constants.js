@@ -7,8 +7,8 @@ export const TITLE = "Pathfinding Visualization"
 export const NODE_BORDER_WIDTH = 1
 export const MAX_WIDTH_FOR_LAYOUT_CHANGE = 700
 
-export const ROWS_CONSTRAINT = 50
-export const COLUMNS_CONSTRAINT = 50
+export const ROWS_CONSTRAINT = 100
+export const COLUMNS_CONSTRAINT = 100
 
 export const STATES = {
     WALKABLE: 0,

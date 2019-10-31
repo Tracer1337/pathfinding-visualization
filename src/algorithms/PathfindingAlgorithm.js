@@ -22,7 +22,7 @@ class Node{
     setDistance = distance => this.distance = distance
 }
 
-export default class Algorithm extends Emitter{
+export default class PathfindingAlgorithm extends Emitter{
     constructor(start, end, grid, instant){
         super()
 
@@ -108,15 +108,6 @@ export default class Algorithm extends Emitter{
                 newOpenListNodes,
                 newClosedListNode: this.closedList.length>1 && this.closedList[this.closedList.length-2]
             }}))
-
-            if(!this.playing){
-                await new Promise(resolve => SettingsProvider.addEventListener("continueSearch", () => {
-                    this.playing = true
-                    resolve()
-                }))
-            }else{
-                await sleep(1/SettingsProvider.settings.framerate.value*1000)
-            }
         }
         return Promise.resolve()
     }

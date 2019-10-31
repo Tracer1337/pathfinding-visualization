@@ -1,6 +1,6 @@
-import Algorithm from "./Algorithm.js"
+import PathfindingAlgorithm from "../PathfindingAlgorithm.js"
 
-export default class DepthFirst extends Algorithm{
+export default class DepthFirst extends PathfindingAlgorithm{
     getNodeInOpenList = node => {
         for(let i = 0; i < this.openList.length; i++){
             if(this.openList[i].equal(node)){
