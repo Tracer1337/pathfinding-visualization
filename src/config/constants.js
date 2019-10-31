@@ -2,7 +2,7 @@ import Arrow from "../assets/icons/chevron_right-24px.svg"
 import Cross from "../assets/icons/highlight_off-24px.svg"
 
 export const DEBUG_MODE = false
-export const TITLE = "Pathfinding Visualization" 
+export const TITLE = "Pathfinding Visualization"
 
 export const NODE_BORDER_WIDTH = 1
 export const MAX_WIDTH_FOR_LAYOUT_CHANGE = 700
@@ -53,4 +53,13 @@ export const Directions = [
         [-1,  0],          [1,  0],
         [-1,  1], [0,  1], [1,  1]
     ]
+]
+
+export const Heuristics = [
+    // Manhattan Distance
+    (currentNode, endNode) => Math.abs(currentNode.x-endNode.x)+Math.abs(currentNode.y-endNode.y),
+    // Diagonal Distance
+    (currentNode, endNode) => Math.max(Math.abs(currentNode.x-endNode.x),Math.abs(currentNode.y-endNode.y)),
+    // Euclidean Distance
+    (currentNode, endNode) => ((currentNode.x-endNode.x)**2+(currentNode.y-endNode.y)**2)**(1/2)
 ]

@@ -6,7 +6,7 @@ import Grid from "./components/Grid.js"
 import Settings from "./components/Settings.js"
 import SettingsProvider from "./utils/SettingsProvider.js"
 import ScreenSizeTracker from "./utils/ScreenSizeTracker.js"
-import algorithms from "./algorithms/AlgorithmProvider.js"
+import algorithms from "./algorithms"
 
 export default class App extends React.Component{
     state = {isSmall: ScreenSizeTracker.isSmall}
