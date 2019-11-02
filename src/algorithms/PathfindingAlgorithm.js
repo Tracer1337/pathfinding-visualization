@@ -1,5 +1,4 @@
 import Emitter from "../utils/Emitter.js"
-import sleep from "../utils/sleep.js"
 import SettingsProvider from "../utils/SettingsProvider.js"
 import {Directions, Heuristics} from "../config/constants.js"
 

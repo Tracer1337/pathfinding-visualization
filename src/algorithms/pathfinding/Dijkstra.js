@@ -23,7 +23,6 @@ export default class DepthFirst extends PathfindingAlgorithm{
 
             // Get the neighbours of the current node
             let newOpenListNodes = []
-            console.log({currentNode, adjacent: this.getAdjacentNodes(currentNode)})
             this.getAdjacentNodes(currentNode).forEach(adjacentNode => {
                 // Calculate distance between node and currentNode
                 let dx = Math.abs(currentNode.x - adjacentNode.x)

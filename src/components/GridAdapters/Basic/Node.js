@@ -1,6 +1,6 @@
 import React from "react"
-import {STATES, BACKGROUNDS, NODE_BORDER_WIDTH, CURSOR_POINTER_STATES} from "../config/constants.js"
-import SettingsProvider from "../utils/SettingsProvider.js"
+import {STATES, BACKGROUNDS, NODE_BORDER_WIDTH, CURSOR_POINTER_STATES} from "../../../config/constants.js"
+import SettingsProvider from "../../../utils/SettingsProvider.js"
 
 export default class Node extends React.Component{
     state = {state: this.props.state}

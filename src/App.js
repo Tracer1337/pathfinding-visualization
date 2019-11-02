@@ -2,12 +2,13 @@ import React from "react"
 
 import {STATES} from "./config/constants.js"
 import Sidebar from "./components/Sidebar.js"
-import Grid from "./components/Grid.js"
 import Settings from "./components/Settings.js"
 import SettingsProvider from "./utils/SettingsProvider.js"
 import ScreenSizeTracker from "./utils/ScreenSizeTracker.js"
 import sleep from "./utils/sleep.js"
 import algorithms from "./algorithms"
+import Grid from "./utils/Grid.js"
+import GridAdapters from "./components/GridAdapters"
 
 export default class App extends React.Component{
     state = {isSmall: ScreenSizeTracker.isSmall}
@@ -98,6 +99,7 @@ export default class App extends React.Component{
         SettingsProvider.addEventListener("searchPath", () => this.calculatePath())
         SettingsProvider.addEventListener("pauseSearch", this.handlePauseSearch)
         SettingsProvider.addEventListener("continueSearch", this.handleContinueSearch)
+        SettingsProvider.addEventListener("visualizationChange", () => this.forceUpdate())
         ScreenSizeTracker.addEventListener("onBoundaryPass", ({detail}) => this.setState({isSmall: detail.isSmall}))
     }
 
@@ -109,12 +111,12 @@ export default class App extends React.Component{
                 </Sidebar>
                 <main className="stage">
                     <div className="grid-wrapper" ref={ref => this.gridWrapper = ref}>
-                        {this.state.columns && this.state.rows ? <Grid
-                            columns={this.state.columns}
-                            rows={this.state.rows}
-                            ref={this.grid}
-                            onRequestPath={this.handleRequestPath}
-                        /> : null}
+                        {this.state.columns && this.state.rows ? React.createElement(GridAdapters[SettingsProvider.settings.visualization.value],{
+                            columns: this.state.columns,
+                            rows: this.state.rows,
+                            ref: this.grid,
+                            onRequestPath: this.handleRequestPath
+                        }) : null}
                     </div>
                 </main>
             </div>

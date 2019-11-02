@@ -1,9 +1,8 @@
 import React from "react"
 
-import Node from "./Node.js"
-import {STATES, DEBUG_MODE, ROWS_CONSTRAINT, COLUMNS_CONSTRAINT} from "../config/constants.js"
-import SettingsProvider from "../utils/SettingsProvider.js"
-import sleep from "../utils/sleep.js"
+import {STATES, ROWS_CONSTRAINT, COLUMNS_CONSTRAINT} from "../config/constants.js"
+import SettingsProvider from "./SettingsProvider.js"
+import sleep from "./sleep.js"
 
 export default class Grid extends React.Component{
     static draggableStates = [STATES.WALKABLE, STATES.BLOCKED]
@@ -13,7 +12,6 @@ export default class Grid extends React.Component{
         super(props)
         this.createNewGrid()
         this.setterState = STATES.BLOCKED
-        this.nodes = []
         this.isMouseDown = false
         this.firstSetterState = null
         this.isMovingPoint = false
@@ -224,12 +222,7 @@ export default class Grid extends React.Component{
         }
     }
 
-    componentDidUpdate(){
-        this.generateStartingPoint()
-        this.generateEndingPoint()
-    }
-
-    componentDidMount(){
+    init(){
         document.addEventListener("mousedown", () => this.isMouseDown = true, true)
         document.addEventListener("mouseup", () => {
             this.firstSetterState = null
@@ -245,26 +238,5 @@ export default class Grid extends React.Component{
 
         this.generateStartingPoint()
         this.generateEndingPoint()
-    }
-
-    render(){
-        this.createNewGrid()
-        return(
-            <div
-                className="grid"
-                ref={ref => this.gridRef = ref}
-                style={{width: this.props.columns*SettingsProvider.settings.nodeSize.value}}
-            >
-                {this.grid.flat().map((state, i) => (
-                    <Node
-                        state={state}
-                        key={i}
-                        onClick={() => this.handleClick(i)}
-                        ref={ref => this.nodes[i] = ref}
-                        onMouseEnter={() => this.handleMouseEnter(i)}
-                    >{DEBUG_MODE && `(${this.indexToCoords(i).join("|")})`}</Node>
-                ))}
-            </div>
-        )
     }
 }

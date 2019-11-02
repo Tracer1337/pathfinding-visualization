@@ -1,4 +1,17 @@
 {
+    "visualization": {
+        "type": "select",
+        "label": "Visualization",
+        "value": 1,
+        "options": [{
+            "label": "Basic",
+            "value": 0
+        },{
+            "label": "3D",
+            "value": 1
+        }]
+    },
+
     "algorithm": {
         "type": "select",
         "label": "Algorithm",
@@ -63,13 +76,6 @@
         "max": 150,
         "step": 10,
         "label": "Node Size"
-    },
-
-    "generateMaze": {
-        "type": "action",
-        "color": "secondary",
-        "variant": "outlined",
-        "label": "Generate Maze"
     },
 
     "clearGrid": {
