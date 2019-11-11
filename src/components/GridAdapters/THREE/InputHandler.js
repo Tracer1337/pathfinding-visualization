@@ -35,9 +35,10 @@ export default class InputHandler{
     }
 
     handleMouseDown = e => {
-        const clickedObject = this.getIntersections(this.objects)[0]
-        if(clickedObject)
-            this.emit(InputHandler.EVENTS.CLICK, clickedObject.object.index)
+        const intersection = this.getIntersections(this.objects)[0]
+        console.log(intersection)
+        if(intersection)
+            this.emit(InputHandler.EVENTS.CLICK, intersection.object.index)
     }
 
     handleMouseUp = () => this.emit(InputHandler.EVENTS.MOUSE_UP)

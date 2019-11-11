@@ -1,19 +1,26 @@
 import {THREE} from "./THREEAdapter.js"
 import {STATES, BACKGROUNDS} from "../../../config/constants.js"
+import SettingsProvider from "../../../utils/SettingsProvider.js"
 
 export default class Node{
-    constructor(x, y, index){
+    constructor(x, y, z, index){
         this.state = STATES.WALKABLE
 
-        this.x = x
-        this.y = y
+        this.x = x*SettingsProvider.settings.nodeSize.value
+        this.y = y*SettingsProvider.settings.nodeSize.value
+        this.z = z*SettingsProvider.settings.nodeSize.value
 
-        this.geometry = new THREE.BoxBufferGeometry(1,1,1)
+        this.geometry = new THREE.BoxBufferGeometry(
+            SettingsProvider.settings.nodeSize.value,
+            1,
+            SettingsProvider.settings.nodeSize.value
+        )
         this.material = new THREE.MeshBasicMaterial({color: 0xFFFFFF})
         this.box = new THREE.Mesh(this.geometry, this.material)
         this.box.index = index
         this.box.position.x = this.x
         this.box.position.y = this.y
+        this.box.position.z = this.z
 
         // Add border to the box
         const borderGeo = new THREE.EdgesGeometry(this.geometry)

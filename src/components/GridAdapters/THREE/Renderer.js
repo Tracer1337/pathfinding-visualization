@@ -24,7 +24,6 @@ export default class Renderer{
         * Create the scene
         */
         this.scene = new THREE.Scene()
-        this.add(new THREE.AxesHelper(5))
 
         /*
         * Create the camera and add it to the scene
@@ -40,9 +39,7 @@ export default class Renderer{
             this.near,
             this.far
         )
-        this.camera.position.z = 100
-        this.camera.position.x = 5
-        this.camera.position.y = 5
+        this.camera.position.y = 1
 
         this.add(this.camera)
 

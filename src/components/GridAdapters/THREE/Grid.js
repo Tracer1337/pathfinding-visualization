@@ -5,10 +5,13 @@ import Node from "./Node.js"
 export default class Grid{
     constructor(columns, rows){
         this.nodes = []
-        for(let y = 0; y < rows; y++){
-            for(let x = 0; x < columns; x++){
-                const index = y*columns+x
-                const node = new Node(x, y, index)
+        const y = -50
+        for(let j = 0; j < rows; j++){
+            for(let i = 0; i < columns; i++){
+                const index = j*columns+i
+                const x = i - columns/2
+                const z = j - rows/2
+                const node = new Node(x, y, z, index)
                 this.nodes[index] = node
             }
         }
