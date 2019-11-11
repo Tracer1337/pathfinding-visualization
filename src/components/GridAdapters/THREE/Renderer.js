@@ -5,12 +5,13 @@ export default class Renderer{
         this.container = container
         this.width = dimensions.width
         this.height = dimensions.height
+        this.inputHandler = null
     }
 
     /*
     * Create the THREE.JS scene
     */
-    init = (grid) => {
+    init = () => {
         /*
         * Create the renderer
         */
@@ -45,6 +46,15 @@ export default class Renderer{
         this.scene.add(this.camera)
 
         this.animate()
+
+        /*
+        * Add controls to the scene
+        */
+        import("three-orbitcontrols").then(module => {
+            const OrbitControls = module.default
+            const controls = new OrbitControls(this.camera, this.renderer.domElement)
+            controls.target = new THREE.Vector3(0,0,0)
+        })
     }
 
     /*
@@ -53,10 +63,26 @@ export default class Renderer{
     add = mesh => this.scene.add(mesh)
 
     /*
+    * Set input handler and add a camera to it
+    */
+    setInputHandler = object => {
+        this.inputHandler = object
+        this.inputHandler.setCamera(this.camera)
+    }
+
+    getDomElement = () => this.renderer.domElement
+
+    /*
     * Animation loop
     */
     animate = () => {
         requestAnimationFrame(this.animate)
+
+        if(this.inputHandler){
+            this.inputHandler.update()
+            this.inputHandler.getIntersections(this.scene.children)
+                .forEach(intersection => intersection.object.material.color.set(0xff0000))
+        }
 
         this.renderer.render(this.scene, this.camera)
     }

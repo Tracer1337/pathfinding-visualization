@@ -12,6 +12,13 @@ export default class Node{
         this.material = new THREE.MeshBasicMaterial({color: 0x0000FF})
         this.box = new THREE.Mesh(this.geometry, this.material)
 
+        // Add border to the box
+        const borderGeo = new THREE.EdgesGeometry(this.geometry)
+        const borderMat = new THREE.LineBasicMaterial({color: 0xffffff, lineWidth: 4})
+        const wireframe = new THREE.LineSegments(borderGeo, borderMat)
+        wireframe.renderOrder = 1
+        this.box.add(wireframe)
+
         this.box.position.x = this.x
         this.box.position.y = this.y
     }
