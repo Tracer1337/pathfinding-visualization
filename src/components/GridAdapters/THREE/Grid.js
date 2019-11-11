@@ -7,8 +7,9 @@ export default class Grid{
         this.nodes = []
         for(let y = 0; y < rows; y++){
             for(let x = 0; x < columns; x++){
-                const node = new Node(x,y)
-                this.nodes[y*columns+x] = node
+                const index = y*columns+x
+                const node = new Node(x, y, index)
+                this.nodes[index] = node
             }
         }
     }

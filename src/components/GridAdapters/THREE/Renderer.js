@@ -82,8 +82,6 @@ export default class Renderer{
     animate = () => {
         requestAnimationFrame(this.animate)
 
-        if(this.inputHandler) this.inputHandler.update(this.objects)
-
         this.renderer.render(this.scene, this.camera)
     }
 }

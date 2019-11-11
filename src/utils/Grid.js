@@ -154,6 +154,7 @@ export default class Grid extends React.Component{
     * Move the starting / ending node or set walls etc.
     */
     handleClick = (index, isMouseEnter = false) => {
+        console.log("[Grid] Clicked index", index)
         const set = (index, state) => {
             if(!isMouseEnter){
                 this.toggleGridAtIndex(index, state)

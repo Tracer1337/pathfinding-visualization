@@ -30,7 +30,9 @@ export default class THREEAdapter extends Grid{
             this.nodes = this.THREEGrid.getNodes()
 
             // Create InputHandler
-            this.inputHandler = new InputHandler(this.renderer.getDomElement())
+            this.inputHandler = new InputHandler(this.renderer)
+            this.inputHandler.addEventListener("click", this.handleClick)
+
             this.renderer.setInputHandler(this.inputHandler)
 
             this.init()
