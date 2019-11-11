@@ -2,7 +2,7 @@
     "visualization": {
         "type": "select",
         "label": "Visualization",
-        "value": 1,
+        "value": 0,
         "options": [{
             "label": "Basic",
             "value": 0
