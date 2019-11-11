@@ -7,7 +7,7 @@ import {eventEmitter} from "./Renderer.js"
 export default class Node{
     constructor(x, z, index){
         this.state = STATES.WALKABLE
-        this.updates = 0
+        this.totalAnimationTime = 0
 
         this.x = x*SettingsProvider.settings.nodeSize.value
         this.y = SettingsProvider.settings.gridPosition.value*SettingsProvider.settings.nodeSize.value
@@ -34,6 +34,11 @@ export default class Node{
         this.box.add(this.wireframe)
     }
 
+    setY = y => {
+        this.y = y
+        this.box.position.y = y
+    }
+
     setState = state => {
         this.state = state
         this.setColor(BACKGROUNDS[this.state][0] === "Color" ? BACKGROUNDS[this.state][1] : BACKGROUNDS[STATES.PATH][1])
@@ -48,13 +53,13 @@ export default class Node{
             this.wireframe.material.color.set(new THREE.Color(BACKGROUNDS[STATES.CLOSED][1]))
     }
 
-    handleUpdate = () => {
-        if(++this.updates === 100){
+    handleUpdate = ({detail}) => {
+        const {delta} = detail
+        if((this.totalAnimationTime+=delta) >= SettingsProvider.settings.animationDuration.value){
             eventEmitter.removeEventListener("update", this.handleUpdate)
-            this.updates = 0
-            return
+            this.totalAnimationTime = 0
         }
-        const factor = Math.sin(scale(this.updates, 0, 100, 0, Math.PI))
+        const factor = Math.sin(scale(this.totalAnimationTime, 0, SettingsProvider.settings.animationDuration.value, 0, Math.PI))
         this.box.position.y = this.y+SettingsProvider.settings.nodeSize.value*factor
     }
 

@@ -92,7 +92,7 @@ export default class Settings extends React.Component{
         return (
             <div className="settings">
                 {Object.keys(this.state).length && Object.keys(SettingsProvider.settings).map(key => !SettingsProvider.settings[key].hidden && (
-                    <div className="input-wrapper" key={key}>
+                    <div className="input-wrapper" key={key} id={key}>
                         <FormControl className="input">
                             {this.getDOMElement(key)}
                         </FormControl>

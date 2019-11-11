@@ -50,6 +50,10 @@ export default class Renderer{
 
         this.add(this.camera)
 
+        /*
+        * Initialize a clock and begin to animate
+        */
+        this.clock = new THREE.Clock()
         this.animate()
 
         /*
@@ -99,7 +103,10 @@ export default class Renderer{
     */
     animate = () => {
         requestAnimationFrame(this.animate)
-        eventEmitter.dispatchEvent(new CustomEvent("update"))
+        const delta = this.clock.getDelta()
+        eventEmitter.dispatchEvent(new CustomEvent("update", {detail: {
+            delta
+        }}))
 
         this.renderer.render(this.scene, this.camera)
     }

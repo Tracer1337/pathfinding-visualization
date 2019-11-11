@@ -6,7 +6,7 @@ class SettingsProvider extends Emitter{
 
     set = (key, value) => {
         if(this.settings[key].value === value) return
-        this.settings[key].value = value
+        this.settings[key].value = value        
         this.dispatchEvent(new CustomEvent(key+"Change", {detail: this.settings[key].value}))
     }
 

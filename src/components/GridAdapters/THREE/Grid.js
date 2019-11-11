@@ -18,7 +18,7 @@ export default class Grid{
 
     move = () => {
         this.y = SettingsProvider.settings.gridPosition.value
-        this.nodes.forEach(node => node.getMesh().position.y = this.y*SettingsProvider.settings.nodeSize.value)
+        this.nodes.forEach(node => node.setY(this.y*SettingsProvider.settings.nodeSize.value))
     }
 
     render = renderer => {
