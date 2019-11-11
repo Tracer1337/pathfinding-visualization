@@ -78,6 +78,15 @@
         "label": "Node Size"
     },
 
+    "gridPosition": {
+        "type": "number",
+        "value": -30,
+        "min": -100,
+        "max": 0,
+        "step": 1,
+        "label": "Grid Position"
+    },
+
     "clearGrid": {
         "type": "action",
         "color": "secondary",

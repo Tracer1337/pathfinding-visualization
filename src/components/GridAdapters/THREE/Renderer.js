@@ -1,4 +1,8 @@
 import {THREE} from "./THREEAdapter.js"
+import SettingsProvider from "../../../utils/SettingsProvider.js"
+
+const eventEmitter = new EventTarget()
+export {eventEmitter}
 
 export default class Renderer{
     constructor(container, dimensions){
@@ -39,7 +43,10 @@ export default class Renderer{
             this.near,
             this.far
         )
-        this.camera.position.y = 1
+        this.camera.position.x = -1000
+        this.camera.position.z = 1000
+
+        this.alignCamera()
 
         this.add(this.camera)
 
@@ -50,10 +57,14 @@ export default class Renderer{
         */
         import("three-orbitcontrols").then(module => {
             const OrbitControls = module.default
-            this.controls = new OrbitControls(this.camera, this.renderer.domElement)
+            this.controls = new OrbitControls(new THREE.PerspectiveCamera(), this.renderer.domElement)
             this.controls.target = new THREE.Vector3(0,0,0)
         })
+
+        SettingsProvider.addEventListener("gridPositionChange", this.alignCamera)
     }
+
+    alignCamera = () => this.camera.lookAt(new THREE.Vector3(0, SettingsProvider.settings.gridPosition.value*SettingsProvider.settings.nodeSize.value, 0))
 
     /*
     * Add element to the scene
@@ -88,6 +99,7 @@ export default class Renderer{
     */
     animate = () => {
         requestAnimationFrame(this.animate)
+        eventEmitter.dispatchEvent(new CustomEvent("update"))
 
         this.renderer.render(this.scene, this.camera)
     }

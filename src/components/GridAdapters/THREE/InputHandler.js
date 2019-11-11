@@ -30,14 +30,13 @@ export default class InputHandler{
         this.raycaster.setFromCamera(this.mouse, this.camera)
 
         const intersection = this.getIntersections(this.objects)[0]
-        if(intersection)
+        if(intersection && intersection.object.isNode)
             this.emit(InputHandler.EVENTS.MOUSE_ENTER, intersection.object.index)
     }
 
     handleMouseDown = e => {
         const intersection = this.getIntersections(this.objects)[0]
-        console.log(intersection)
-        if(intersection)
+        if(intersection && intersection.object.isNode)
             this.emit(InputHandler.EVENTS.CLICK, intersection.object.index)
     }
 
