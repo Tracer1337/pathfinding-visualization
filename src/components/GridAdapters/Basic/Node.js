@@ -6,7 +6,6 @@ export default class Node extends React.Component{
     state = {state: this.props.state}
 
     toggle = state => {
-        if(this.throttle) return
         if(this.state.state === state){
             this.setState({state: STATES.WALKABLE})
         }else{

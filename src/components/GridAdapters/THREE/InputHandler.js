@@ -1,7 +1,7 @@
 import {THREE} from "./THREEAdapter.js"
 
 export default class InputHandler{
-    static EVENTS = {CLICK: "click"}
+    static EVENTS = {CLICK: "click", MOUSE_UP: "mouseup"}
 
     constructor(renderer){
         this.domElement = renderer.getDomElement()
@@ -11,6 +11,7 @@ export default class InputHandler{
 
         this.domElement.addEventListener("mousemove", this.handleMouseMove)
         this.domElement.addEventListener("mousedown", this.handleMouseDown)
+        this.domElement.addEventListener("mouseup", this.handleMouseUp)
 
         this.listeners = {}
         for(let event in InputHandler.EVENTS)
@@ -21,6 +22,8 @@ export default class InputHandler{
         this.listeners[eventName].push(callback)
     }
 
+    emit = (eventName, data) => this.listeners[eventName].forEach(callback => callback(data))
+
     handleMouseMove = e => {
         this.mouse.x = (e.offsetX/this.domElement.clientWidth)*2-1
         this.mouse.y = (e.offsetY/this.domElement.clientHeight)*-2+1
@@ -30,8 +33,10 @@ export default class InputHandler{
     handleMouseDown = e => {
         const clickedObject = this.getIntersections(this.objects)[0]
         if(clickedObject)
-            this.listeners[InputHandler.EVENTS.CLICK].forEach(callback => callback(clickedObject.object.index))
+            this.emit(InputHandler.EVENTS.CLICK, clickedObject.object.index)
     }
+
+    handleMouseUp = () => this.emit(InputHandler.EVENTS.MOUSE_UP)
 
     getIntersections = objects => this.raycaster.intersectObjects(objects)
 

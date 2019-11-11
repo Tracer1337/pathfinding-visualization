@@ -53,8 +53,8 @@ export default class Renderer{
         */
         import("three-orbitcontrols").then(module => {
             const OrbitControls = module.default
-            const controls = new OrbitControls(this.camera, this.renderer.domElement)
-            controls.target = new THREE.Vector3(0,0,0)
+            this.controls = new OrbitControls(this.camera, this.renderer.domElement)
+            this.controls.target = new THREE.Vector3(0,0,0)
         })
     }
 
@@ -65,6 +65,16 @@ export default class Renderer{
         this.scene.add(mesh)
         this.objects.push(mesh)
     }
+
+    /*
+    * Enable controls
+    */
+    enableControls = () => this.controls.enabled = true
+
+    /*
+    * Diable controls
+    */
+    disableControls = () => this.controls.enabled = false
 
     /*
     * Set input handler and add a camera to it

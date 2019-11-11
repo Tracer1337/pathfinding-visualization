@@ -31,7 +31,11 @@ export default class THREEAdapter extends Grid{
 
             // Create InputHandler
             this.inputHandler = new InputHandler(this.renderer)
-            this.inputHandler.addEventListener("click", this.handleClick)
+            this.inputHandler.addEventListener("click", index => {
+                this.renderer.disableControls()
+                this.handleClick(index)
+            })
+            this.inputHandler.addEventListener("mouseup", this.renderer.enableControls)
 
             this.renderer.setInputHandler(this.inputHandler)
 
