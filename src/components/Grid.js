@@ -159,7 +159,7 @@ export default class Grid extends React.Component{
                 this.toggleGridAtIndex(index, state)
             }else if(Grid.draggableStates.includes(state) && !Grid.protectedStates.includes(gridState)){
                 if(this.firstSetterState === null){
-                    this.firstSetterState = this.nodes[index].state.state !== STATES.BLOCKED
+                    this.firstSetterState = this.nodes[index].getState() !== STATES.BLOCKED
                 }
                 if(this.firstSetterState){
                     this.setGridAtIndex(index, state)

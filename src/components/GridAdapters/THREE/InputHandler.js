@@ -8,6 +8,7 @@ export default class InputHandler{
         this.objects = renderer.objects
         this.mouse = new THREE.Vector2()
         this.raycaster = new THREE.Raycaster()
+        this.currentObject = {uuid: null}
 
         this.domElement.addEventListener("mousemove", this.handleMouseMove)
         this.domElement.addEventListener("mousedown", this.handleMouseDown)
@@ -30,8 +31,10 @@ export default class InputHandler{
         this.raycaster.setFromCamera(this.mouse, this.camera)
 
         const intersection = this.getIntersections(this.objects)[0]
-        if(intersection && intersection.object.isNode)
+        if(intersection && intersection.object.isNode && this.currentObject.uuid !== intersection.object.uuid){
             this.emit(InputHandler.EVENTS.MOUSE_ENTER, intersection.object.index)
+            this.currentObject = intersection.object
+        }
     }
 
     handleMouseDown = e => {

@@ -78,6 +78,11 @@
         "label": "Node Size"
     },
 
+    "label3DOnly": {
+        "type": "label",
+        "value": "Settings for 3D Mode"
+    },
+
     "gridPosition": {
         "type": "number",
         "value": -30,

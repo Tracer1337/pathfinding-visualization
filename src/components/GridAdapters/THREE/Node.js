@@ -1,5 +1,5 @@
 import {THREE} from "./THREEAdapter.js"
-import {STATES, BACKGROUNDS} from "../../../config/constants.js"
+import {STATES, BACKGROUNDS, ANIMATION_OFFSET} from "../../../config/constants.js"
 import SettingsProvider from "../../../utils/SettingsProvider.js"
 import scale from "../../../utils/scale.js"
 import {eventEmitter} from "./Renderer.js"
@@ -44,8 +44,12 @@ export default class Node{
         this.setColor(BACKGROUNDS[this.state][0] === "Color" ? BACKGROUNDS[this.state][1] : BACKGROUNDS[STATES.PATH][1])
     }
 
+    getState = () => this.state
+
     setColor = color => {
-        eventEmitter.addEventListener("update", this.handleUpdate)
+        if(color !== BACKGROUNDS[STATES.WALKABLE][1]){
+            eventEmitter.addEventListener("update", this.handleUpdate)
+        }
         this.box.material.color.set(new THREE.Color(color))
         if(color === BACKGROUNDS[STATES.CLOSED][1])
             this.wireframe.material.color.set(new THREE.Color(BACKGROUNDS[STATES.PATH][1]))
@@ -60,7 +64,7 @@ export default class Node{
             this.totalAnimationTime = 0
         }
         const factor = Math.sin(scale(this.totalAnimationTime, 0, SettingsProvider.settings.animationDuration.value, 0, Math.PI))
-        this.box.position.y = this.y+SettingsProvider.settings.nodeSize.value*factor
+        this.box.position.y = this.y+ANIMATION_OFFSET*factor
     }
 
     toggle = (state) => {
@@ -78,7 +82,9 @@ export default class Node{
     }
 
     reset = () => {
-        this.setState(STATES.WALKABLE)
+        if(this.state !== STATES.START && this.state !== STATES.END){
+            this.setState(STATES.WALKABLE)
+        }
     }
 
     force = state => {

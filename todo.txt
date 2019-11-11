@@ -3,6 +3,6 @@ Faster animations:
 
 Maze generator
 
-Three js visualization
+Alternative camera controls in 3D Mode
 
 tutorial

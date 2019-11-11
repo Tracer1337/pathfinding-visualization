@@ -1,5 +1,5 @@
 import React from "react"
-import {FormControl, InputLabel, Select, MenuItem, Button, Input, Slider, Grid} from "@material-ui/core"
+import {FormControl, InputLabel, Select, MenuItem, Button, Input, Slider, Grid, Typography} from "@material-ui/core"
 
 import SettingsProvider from "../utils/SettingsProvider.js"
 
@@ -65,6 +65,11 @@ export default class Settings extends React.Component{
                             </Grid>
                         </Grid>
                     </>
+                )
+
+            case "label":
+                return (
+                    <Typography variant="subtitle1">{setting.value}</Typography>
                 )
 
             default:

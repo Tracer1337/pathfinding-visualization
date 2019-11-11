@@ -1,3 +1,5 @@
+import SettingsProvider from "../utils/SettingsProvider.js"
+
 import Arrow from "../assets/icons/chevron_right-24px.svg"
 import Cross from "../assets/icons/highlight_off-24px.svg"
 
@@ -6,6 +8,7 @@ export const TITLE = "Pathfinding Visualization"
 
 export const NODE_BORDER_WIDTH = 1
 export const MAX_WIDTH_FOR_LAYOUT_CHANGE = 700
+export const ANIMATION_OFFSET = SettingsProvider.settings.nodeSize.value*.5
 
 export const ROWS_CONSTRAINT = 100
 export const COLUMNS_CONSTRAINT = 100
