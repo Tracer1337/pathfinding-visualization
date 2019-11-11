@@ -6,6 +6,7 @@ export default class Renderer{
         this.width = dimensions.width
         this.height = dimensions.height
         this.inputHandler = null
+        this.objects = []
     }
 
     /*
@@ -23,7 +24,7 @@ export default class Renderer{
         * Create the scene
         */
         this.scene = new THREE.Scene()
-        this.scene.add(new THREE.AxesHelper(5))
+        this.add(new THREE.AxesHelper(5))
 
         /*
         * Create the camera and add it to the scene
@@ -43,7 +44,7 @@ export default class Renderer{
         this.camera.position.x = 5
         this.camera.position.y = 5
 
-        this.scene.add(this.camera)
+        this.add(this.camera)
 
         this.animate()
 
@@ -60,7 +61,10 @@ export default class Renderer{
     /*
     * Add element to the scene
     */
-    add = mesh => this.scene.add(mesh)
+    add = mesh => {
+        this.scene.add(mesh)
+        this.objects.push(mesh)
+    }
 
     /*
     * Set input handler and add a camera to it
@@ -78,11 +82,7 @@ export default class Renderer{
     animate = () => {
         requestAnimationFrame(this.animate)
 
-        if(this.inputHandler){
-            this.inputHandler.update()
-            this.inputHandler.getIntersections(this.scene.children)
-                .forEach(intersection => intersection.object.material.color.set(0xff0000))
-        }
+        if(this.inputHandler) this.inputHandler.update(this.objects)
 
         this.renderer.render(this.scene, this.camera)
     }
