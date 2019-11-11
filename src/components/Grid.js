@@ -1,8 +1,8 @@
 import React from "react"
 
 import {STATES, ROWS_CONSTRAINT, COLUMNS_CONSTRAINT} from "../config/constants.js"
-import SettingsProvider from "./SettingsProvider.js"
-import sleep from "./sleep.js"
+import SettingsProvider from "../utils/SettingsProvider.js"
+import sleep from "../utils/sleep.js"
 
 export default class Grid extends React.Component{
     static draggableStates = [STATES.WALKABLE, STATES.BLOCKED]

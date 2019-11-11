@@ -1,6 +1,6 @@
 import React from "react"
 
-import Grid from "../../../utils/Grid.js"
+import Grid from "../../Grid.js"
 import Node from "./Node.js"
 import SettingsProvider from "../../../utils/SettingsProvider.js"
 import {DEBUG_MODE} from "../../../config/constants.js"

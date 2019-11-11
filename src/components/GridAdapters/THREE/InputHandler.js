@@ -1,7 +1,7 @@
 import {THREE} from "./THREEAdapter.js"
 
 export default class InputHandler{
-    static EVENTS = {CLICK: "click", MOUSE_UP: "mouseup"}
+    static EVENTS = {CLICK: "click", MOUSE_UP: "mouseup", MOUSE_ENTER: "mouseenter"}
 
     constructor(renderer){
         this.domElement = renderer.getDomElement()
@@ -28,6 +28,10 @@ export default class InputHandler{
         this.mouse.x = (e.offsetX/this.domElement.clientWidth)*2-1
         this.mouse.y = (e.offsetY/this.domElement.clientHeight)*-2+1
         this.raycaster.setFromCamera(this.mouse, this.camera)
+
+        const intersection = this.getIntersections(this.objects)[0]
+        if(intersection)
+            this.emit(InputHandler.EVENTS.MOUSE_ENTER, intersection.object.index)
     }
 
     handleMouseDown = e => {

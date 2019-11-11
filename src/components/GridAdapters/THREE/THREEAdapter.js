@@ -1,6 +1,6 @@
 import React from "react"
 
-import Grid from "../../../utils/Grid.js"
+import Grid from "../../Grid.js"
 import SettingsProvider from "../../../utils/SettingsProvider.js"
 import Renderer from "./Renderer.js"
 import THREEGrid from "./Grid.js"
@@ -36,6 +36,7 @@ export default class THREEAdapter extends Grid{
                 this.handleClick(index)
             })
             this.inputHandler.addEventListener("mouseup", this.renderer.enableControls)
+            this.inputHandler.addEventListener("mouseenter", this.handleMouseEnter)
 
             this.renderer.setInputHandler(this.inputHandler)
 

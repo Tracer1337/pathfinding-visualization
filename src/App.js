@@ -7,7 +7,7 @@ import SettingsProvider from "./utils/SettingsProvider.js"
 import ScreenSizeTracker from "./utils/ScreenSizeTracker.js"
 import sleep from "./utils/sleep.js"
 import algorithms from "./algorithms"
-import Grid from "./utils/Grid.js"
+import Grid from "./components/Grid.js"
 import GridAdapters from "./components/GridAdapters"
 
 export default class App extends React.Component{
