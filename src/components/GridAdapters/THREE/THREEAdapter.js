@@ -59,6 +59,10 @@ export default class THREEAdapter extends Grid{
         })
     }
 
+    componentWillUnmount(){
+        this.renderer.destroy()
+    }
+
     render(){
         this.createNewGrid()
         return(

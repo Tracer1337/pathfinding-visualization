@@ -11,6 +11,7 @@ export default class Renderer{
         this.height = dimensions.height
         this.inputHandler = null
         this.objects = []
+        this.running = true
     }
 
     /*
@@ -99,10 +100,25 @@ export default class Renderer{
     getDomElement = () => this.renderer.domElement
 
     /*
+    * Destroy the renderer and all of its dependencies
+    */
+    destroy = () => {
+        this.running = false
+        this.renderer = null
+        this.scene = null
+        this.clock = null
+        for(let object of this.objects){
+            object = null
+        }
+    }
+
+    /*
     * Animation loop
     */
     animate = () => {
-        requestAnimationFrame(this.animate)
+        console.log("[Renderer] Update")
+        if(!this.running) return
+        this.animationRequestId = requestAnimationFrame(this.animate)
         const delta = this.clock.getDelta()
         eventEmitter.dispatchEvent(new CustomEvent("update", {detail: {
             delta
