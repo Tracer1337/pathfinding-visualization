@@ -33,13 +33,10 @@ export default class PathfindingAlgorithm extends Emitter{
         this.grid = grid
 
         this.instant = instant
-        this.playing = true
-
+        
         this.setHeuristic(0)
         this.setDirections(0)
         this.startNode.setDistance(0)
-
-        SettingsProvider.addEventListener("pauseSearch", () => this.playing = false)
 
         if(!this.findPath){
             throw new Error("Missing method: findPath")
