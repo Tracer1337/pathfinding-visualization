@@ -44,13 +44,11 @@ export default class Node extends React.Component{
     }
 
     render(){
-        let background = BACKGROUNDS[this.state.state], backgroundImage, backgroundColor
+        let background = BACKGROUNDS[this.state.state], backgroundImage
 
+        let backgroundColor = background[1]
         if(background[0] === "Image"){
-            backgroundImage = background[1]
-            backgroundColor = BACKGROUNDS[STATES.PATH][1]
-        }else if(background[0] === "Color"){
-            backgroundColor = background[1]
+            backgroundImage = `url(${background[2]})`
         }
 
         return(

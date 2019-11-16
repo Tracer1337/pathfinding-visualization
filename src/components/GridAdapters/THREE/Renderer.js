@@ -116,7 +116,6 @@ export default class Renderer{
     * Animation loop
     */
     animate = () => {
-        console.log("[Renderer] Update")
         if(!this.running) return
         this.animationRequestId = requestAnimationFrame(this.animate)
         const delta = this.clock.getDelta()

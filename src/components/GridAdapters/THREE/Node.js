@@ -41,20 +41,25 @@ export default class Node{
 
     setState = state => {
         this.state = state
-        this.setColor(BACKGROUNDS[this.state][0] === "Color" ? BACKGROUNDS[this.state][1] : BACKGROUNDS[STATES.PATH][1])
+        this.setSurface(BACKGROUNDS[this.state])
     }
 
     getState = () => this.state
 
-    setColor = color => {
-        if(color !== BACKGROUNDS[STATES.WALKABLE][1]){
+    setSurface = data => {
+        // Start animation when the new state is not "walkable"
+        if(data[1] !== BACKGROUNDS[STATES.WALKABLE][1]){
             eventEmitter.addEventListener("update", this.handleUpdate)
         }
-        this.box.material.color.set(new THREE.Color(color))
-        if(color === BACKGROUNDS[STATES.CLOSED][1])
+
+        this.box.material.color.set(new THREE.Color(data[1]))
+
+        // Change border color when the color of the node equals the border color
+        if(data[1] === BACKGROUNDS[STATES.CLOSED][1]){
             this.wireframe.material.color.set(new THREE.Color(BACKGROUNDS[STATES.PATH][1]))
-        else
+        }else{
             this.wireframe.material.color.set(new THREE.Color(BACKGROUNDS[STATES.CLOSED][1]))
+        }
     }
 
     handleUpdate = ({detail}) => {

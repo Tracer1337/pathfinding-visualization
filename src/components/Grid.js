@@ -177,6 +177,8 @@ export default class Grid extends React.Component{
 
         const coords = this.indexToCoords(index)
         const gridState = this.grid[coords[1]][coords[0]]
+
+        // Move the node to another position
         if(!this.isSettingPoints){
             if(gridState === STATES.START || gridState === STATES.END || this.isMovingPoint){
                 if(!this.isMovingPoint){
@@ -189,7 +191,7 @@ export default class Grid extends React.Component{
                 if(
                     this.lastIndex &&
                     !Grid.protectedStates.includes(gridState) &&
-                    !(this.isPathAvailable && gridState === STATES.BLOCKED)
+                    gridState !== STATES.BLOCKED
                 ){
                     if(this.movingState === STATES.START) this.startingPoint = index
                     else if(this.movingState === STATES.END) this.endingPoint = index
@@ -207,6 +209,7 @@ export default class Grid extends React.Component{
             }
         }
 
+        // Change the state of the node
         if(!this.isMovingPoint){
             this.isSettingPoints = true
             set(index, this.setterState)

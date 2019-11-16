@@ -25,13 +25,13 @@ export const STATES = {
 }
 
 const Color = c => ["Color", c]
-const Image = img => ["Image", img]
+const Image = (c, img) => ["Image", c, img]
 
 export const BACKGROUNDS = {
     [STATES.WALKABLE]: Color("white"),
     [STATES.BLOCKED]: Color("#2c3e50"),
-    [STATES.START]: Image(`url(${Arrow})`),
-    [STATES.END]: Image(`url(${Cross})`),
+    [STATES.START]: Image("#2ecc71", Arrow),
+    [STATES.END]: Image("#2ecc71", Cross),
     [STATES.PATH]: Color("#2ecc71"),
     [STATES.CURRENT]: Color("#f1c40f"),
     [STATES.OPEN]: Color("#1abc9c"),
