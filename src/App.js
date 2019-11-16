@@ -9,6 +9,7 @@ import sleep from "./utils/sleep.js"
 import algorithms from "./algorithms"
 import Grid from "./components/Grid.js"
 import GridAdapters from "./components/GridAdapters"
+import Alert from "./components/Alert.js"
 
 export default class App extends React.Component{
     state = {isSmall: ScreenSizeTracker.isSmall}
@@ -57,7 +58,7 @@ export default class App extends React.Component{
                 this.grid.current.showPath(path)
             }else{
                 // No path found
-                alert("There is no path")
+                this.alert.error("No path found")
             }
         })
     }
@@ -109,6 +110,7 @@ export default class App extends React.Component{
                 <Sidebar>
                     <Settings/>
                 </Sidebar>
+                <Alert ref={ref => this.alert = ref}/>
                 <main className="stage">
                     <div className="grid-wrapper" ref={ref => this.gridWrapper = ref}>
                         {this.state.columns && this.state.rows ? React.createElement(GridAdapters[SettingsProvider.settings.visualization.value],{

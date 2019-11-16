@@ -91,5 +91,20 @@ body{
                 }
             }
         }
+
+        .alert{
+            &.error{
+                background-color: #d32f2f;
+            }
+
+            .message{
+                display: flex;
+                align-items: center;
+
+                img{
+                    margin-right: 8px;
+                }
+            }
+        }
     }
 }
