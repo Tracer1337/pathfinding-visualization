@@ -1,15 +1,17 @@
 import React from "react"
 
-import {STATES} from "./config/constants.js"
-import Sidebar from "./components/Sidebar.js"
-import Settings from "./components/Settings.js"
 import SettingsProvider from "./utils/SettingsProvider.js"
 import ScreenSizeTracker from "./utils/ScreenSizeTracker.js"
 import sleep from "./utils/sleep.js"
+import {STATES} from "./config/constants.js"
 import algorithms from "./algorithms"
+
+import Sidebar from "./components/Sidebar.js"
+import Settings from "./components/Settings.js"
 import Grid from "./components/Grid.js"
 import GridAdapters from "./components/GridAdapters"
 import Alert from "./components/Alert.js"
+import FloatingActionButtons from "./components/FloatingActionButtons.js"
 
 export default class App extends React.Component{
     state = {isSmall: ScreenSizeTracker.isSmall}
@@ -27,11 +29,7 @@ export default class App extends React.Component{
 
     calculatePath = (instant = false) => {
         if(instant) this.grid.current.clearPath()
-        else {
-            this.grid.current.initNewPath()
-            SettingsProvider.hide("searchPath")
-            SettingsProvider.show("pauseSearch")
-        }
+        else this.grid.current.initNewPath()
 
         const grid = this.grid.current.grid
         const startingPoint = this.indexToCoords(this.grid.current.startingPoint)
@@ -57,10 +55,6 @@ export default class App extends React.Component{
             }
             await sleep(iterations.length*interval)
 
-            SettingsProvider.show("searchPath")
-            SettingsProvider.hide("pauseSearch")
-            SettingsProvider.hide("continueSearch")
-
             if(path){
                 // Show final path
                 this.grid.current.showPath(path)
@@ -69,16 +63,6 @@ export default class App extends React.Component{
                 this.alert.error("No path found")
             }
         })
-    }
-
-    handlePauseSearch = () => {
-        SettingsProvider.hide("pauseSearch")
-        SettingsProvider.show("continueSearch")
-    }
-
-    handleContinueSearch = () => {
-        SettingsProvider.hide("continueSearch")
-        SettingsProvider.show("pauseSearch")
     }
 
     handleRequestPath = () => {
@@ -106,8 +90,6 @@ export default class App extends React.Component{
         this.resetNodeSize()
         SettingsProvider.addEventListener("applyNodeSize", this.resetNodeSize)
         SettingsProvider.addEventListener("searchPath", () => this.calculatePath())
-        SettingsProvider.addEventListener("pauseSearch", this.handlePauseSearch)
-        SettingsProvider.addEventListener("continueSearch", this.handleContinueSearch)
         SettingsProvider.addEventListener("visualizationChange", () => this.forceUpdate())
         ScreenSizeTracker.addEventListener("onBoundaryPass", ({detail}) => this.setState({isSmall: detail.isSmall}))
     }
@@ -134,6 +116,8 @@ export default class App extends React.Component{
                         }) : null}
                     </div>
                 </main>
+
+                {this.state.isSmall && <FloatingActionButtons/>}
             </div>
         )
     }

@@ -112,29 +112,17 @@
         "type": "action",
         "color": "secondary",
         "variant": "outlined",
-        "label": "Clear Grid"
+        "label": "Clear Grid",
+        "icon": "close-24px.svg",
+        "fabAvailable": true
     },
 
     "searchPath": {
         "type": "action",
         "color": "primary",
         "variant": "contained",
-        "label": "Search Path"
-    },
-
-    "pauseSearch": {
-        "type": "action",
-        "color": "primary",
-        "variant": "contained",
-        "label": "Pause Search",
-        "hidden": "true"
-    },
-
-    "continueSearch": {
-        "type": "action",
-        "color": "primary",
-        "variant": "contained",
-        "label": "Continue Search",
-        "hidden": "true"
+        "label": "Search Path",
+        "icon": "play_arrow-24px.svg",
+        "fabAvailable": true
     }
 }
