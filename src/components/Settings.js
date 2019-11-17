@@ -15,9 +15,10 @@ export default class Settings extends React.Component{
                     <>
                         <InputLabel>{setting.label}</InputLabel>
                         <Select
-                            value={this.state[key]}
+                            value={this.state[key] || 0}
                             onChange={e => this.handleChange(e, key)}
                             className="input"
+                            InputLabelProps={{shrink: true}}
                         >
                             {setting.options.map(option => (
                                 <MenuItem value={option.value} key={option.label}>{option.label}</MenuItem>
@@ -94,9 +95,13 @@ export default class Settings extends React.Component{
     }
 
     render(){
+        let settings = this.props.isSmall ?
+            Object.keys(SettingsProvider.settings).filter(setting => !SettingsProvider.settings[setting].fabAvailable) :
+            Object.keys(SettingsProvider.settings)
+
         return (
             <div className="settings">
-                {Object.keys(this.state).length && Object.keys(SettingsProvider.settings).map(key => !SettingsProvider.settings[key].hidden && (
+                {Object.keys(this.state).length && settings.map(key => !SettingsProvider.settings[key].hidden && (
                     <div className="input-wrapper" key={key} id={key}>
                         <FormControl className="input">
                             {this.getDOMElement(key)}

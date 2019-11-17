@@ -102,7 +102,7 @@ export default class App extends React.Component{
         return(
             <div className="app" style={{display: this.state.isSmall ? "block" : ""}}>
                 <Sidebar>
-                    <Settings/>
+                    <Settings isSmall={this.state.isSmall}/>
                 </Sidebar>
                 <Alert ref={ref => this.alert = ref}/>
                 <main className="stage">
