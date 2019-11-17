@@ -47,22 +47,12 @@ export default class App extends React.Component{
         pathFinder.addEventListener("nextIteration", handleNextIteration)
 
         pathFinder.findPath().then(async path => {
-            // let isPlaying = true
-            // // Pause search when pause button clicked
-            // SettingsProvider.addEventListener("pauseSearch", () => isPlaying = false)
-
             const interval = 1/SettingsProvider.settings.framerate.value*1000
 
             pathFinder.removeEventListener("nextIteration", handleNextIteration)
-            for(let i = 0; i < iterations.length; i++){
-                // Wait for continue clicked when search is paused
-                // if(!isPlaying){
-                //     await new Promise(resolve => SettingsProvider.addEventListener("continueSearch", () => {
-                //         isPlaying = true
-                //         resolve()
-                //     }))
-                // }
 
+            // Create a timeout for each iteration
+            for(let i = 0; i < iterations.length; i++){
                 setTimeout(() => this.handleNextIteration(iterations[i]), i*interval)
             }
             await sleep(iterations.length*interval)

@@ -153,6 +153,7 @@ export default class Grid extends React.Component{
                 showTile()
             }
         }
+        await sleep(interval*path.length)
         this.isPathAvailable = true
     }
 

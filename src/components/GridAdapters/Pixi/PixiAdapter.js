@@ -4,23 +4,20 @@ import * as PIXI from "pixi.js"
 import Grid from "../../Grid.js"
 import GridRenderer from "./Grid.js"
 import SettingsProvider from "../../../utils/SettingsProvider.js"
+import {BACKGROUNDS} from "../../../config/constants.js"
 
 export default class PixiAdapter extends Grid{
     renderGrid = () => {
-        this.gridRenderer = new GridRenderer(this.props.columns, this.props.rows)
+        this.gridRenderer = new GridRenderer(this.props.columns, this.props.rows, this.app.renderer)
         this.nodes = this.gridRenderer.getNodes()
         this.nodes.forEach(node => {
             node.addEventListener("mouseover", this.handleMouseOver)
             node.addEventListener("mousedown", this.handleMouseDown)
-            this.app.stage.addChild(node.graphics)
+            this.app.stage.addChild(node.getSprite())
         })
     }
 
-    handleMouseOver = ({detail}) => this.handleMouseEnter(detail)
-
-    handleMouseDown = ({detail}) => this.handleClick(detail)
-
-    componentDidMount(){
+    setup(){
         const width = this.props.columns * SettingsProvider.settings.nodeSize.value
         const height = this.props.rows * SettingsProvider.settings.nodeSize.value
 
@@ -35,6 +32,20 @@ export default class PixiAdapter extends Grid{
 
         this.sceneContainer.appendChild(this.app.view)
         this.init()
+    }
+
+    handleMouseOver = ({detail}) => this.handleMouseEnter(detail)
+
+    handleMouseDown = ({detail}) => this.handleClick(detail)
+
+    componentDidMount(){
+        for(let key in BACKGROUNDS){
+            const background = BACKGROUNDS[key]
+            if(background[0] === "Image" && !PIXI.Loader.shared.resources[background[2]]){
+                PIXI.Loader.shared.add(background[2])
+            }
+        }
+        PIXI.Loader.shared.load(this.setup.bind(this))
     }
 
     componentWillUnmount(){
