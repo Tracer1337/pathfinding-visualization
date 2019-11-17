@@ -41,8 +41,8 @@ export default class Node extends Emitter{
         this.sprite.height = size
 
         this.sprite.interactive = true
-        this.sprite.on("mouseover", () => this.dispatchEvent(new CustomEvent("mouseover", {detail: this.index})))
-        this.sprite.on("mousedown", () => this.dispatchEvent(new CustomEvent("mousedown", {detail: this.index})))
+        this.sprite.on("pointerover", () => this.dispatchEvent(new CustomEvent("mouseover", {detail: this.index})))
+        this.sprite.on("pointerdown", () => this.dispatchEvent(new CustomEvent("mousedown", {detail: this.index})))
     }
 
     getSprite = () => this.sprite

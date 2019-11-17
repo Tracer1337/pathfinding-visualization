@@ -234,15 +234,21 @@ export default class Grid extends React.Component{
     }
 
     init(){
-        document.addEventListener("mousedown", () => this.isMouseDown = true, true)
-        document.addEventListener("mouseup", () => {
+        const handleMouseDown = () => this.isMouseDown = true
+        document.addEventListener("mousedown", handleMouseDown, true)
+        document.addEventListener("touchstart", handleMouseDown, true)
+
+        const handleMouseUp = () => {
             this.firstSetterState = null
             this.movingState = null
             this.lastIndex = null
             this.isMouseDown = false
             this.isMovingPoint = false
             this.isSettingPoints = false
-        })
+        }
+        document.addEventListener("mouseup", handleMouseUp)
+        document.addEventListener("touchend", handleMouseUp)
+
         SettingsProvider.addEventListener("clearGrid", this.clearGrid)
 
         this.generateStartingPoint()
