@@ -137,13 +137,20 @@ export default class Grid extends React.Component{
     * Animate the provided path
     */
     showPath = async path => {
-        for(let point of path){
-            if(Grid.protectedStates.includes(this.grid[point[1]][point[0]])) continue
-            this.grid[point[1]][point[0]] = 4
-            this.nodes[this.coordsToIndex({x:point[0], y:point[1]})].set(STATES.PATH)
+        const interval = 1/SettingsProvider.settings.framerate.value*1000
+        for(let i = 0; i < path.length; i++){
+            const point = path[i]
+            const showTile = () => {
+                if(Grid.protectedStates.includes(this.grid[point[1]][point[0]])) return
+                this.grid[point[1]][point[0]] = 4
+                this.nodes[this.coordsToIndex({x:point[0], y:point[1]})].set(STATES.PATH)
+            }
+
             // If there is already an path, show the new one instantly
             if(!this.isPathAvailable){
-                await sleep(1/SettingsProvider.settings.framerate.value*1000)
+                setTimeout(showTile, interval*i)
+            }else{
+                showTile()
             }
         }
         this.isPathAvailable = true
@@ -235,8 +242,6 @@ export default class Grid extends React.Component{
             this.isMovingPoint = false
             this.isSettingPoints = false
         })
-
-        SettingsProvider.addEventListener("nodeSizeChange", () => this.forceUpdate())
         SettingsProvider.addEventListener("clearGrid", this.clearGrid)
 
         this.generateStartingPoint()

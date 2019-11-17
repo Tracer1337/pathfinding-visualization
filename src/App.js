@@ -14,10 +14,12 @@ import Alert from "./components/Alert.js"
 export default class App extends React.Component{
     state = {isSmall: ScreenSizeTracker.isSmall}
     grid = React.createRef()
+    remountKey = 0
 
     resetNodeSize = () => this.setState({
         columns: Math.floor(this.gridWrapper.clientWidth / SettingsProvider.settings.nodeSize.value),
-        rows: Math.floor(this.gridWrapper.clientHeight / SettingsProvider.settings.nodeSize.value)
+        rows: Math.floor(this.gridWrapper.clientHeight / SettingsProvider.settings.nodeSize.value),
+        shouldRemount: true
     })
 
     indexToCoords = index => [index%this.state.columns, Math.floor(index/this.state.columns)]
@@ -45,23 +47,25 @@ export default class App extends React.Component{
         pathFinder.addEventListener("nextIteration", handleNextIteration)
 
         pathFinder.findPath().then(async path => {
-            let isPlaying = true
-            // Pause search when pause button clicked
-            SettingsProvider.addEventListener("pauseSearch", () => isPlaying = false)
+            // let isPlaying = true
+            // // Pause search when pause button clicked
+            // SettingsProvider.addEventListener("pauseSearch", () => isPlaying = false)
+
+            const interval = 1/SettingsProvider.settings.framerate.value*1000
 
             pathFinder.removeEventListener("nextIteration", handleNextIteration)
-            for(let iteration of iterations){
+            for(let i = 0; i < iterations.length; i++){
                 // Wait for continue clicked when search is paused
-                if(!isPlaying){
-                    await new Promise(resolve => SettingsProvider.addEventListener("continueSearch", () => {
-                        isPlaying = true
-                        resolve()
-                    }))
-                }
+                // if(!isPlaying){
+                //     await new Promise(resolve => SettingsProvider.addEventListener("continueSearch", () => {
+                //         isPlaying = true
+                //         resolve()
+                //     }))
+                // }
 
-                this.handleNextIteration(iteration)
-                await sleep(1/SettingsProvider.settings.framerate.value*1000)
+                setTimeout(() => this.handleNextIteration(iterations[i]), i*interval)
             }
+            await sleep(iterations.length*interval)
 
             SettingsProvider.show("searchPath")
             SettingsProvider.hide("pauseSearch")
@@ -110,12 +114,16 @@ export default class App extends React.Component{
 
     componentDidMount(){
         this.resetNodeSize()
-        SettingsProvider.addEventListener("nodeSizeChange", this.resetNodeSize)
+        SettingsProvider.addEventListener("applyNodeSize", this.resetNodeSize)
         SettingsProvider.addEventListener("searchPath", () => this.calculatePath())
         SettingsProvider.addEventListener("pauseSearch", this.handlePauseSearch)
         SettingsProvider.addEventListener("continueSearch", this.handleContinueSearch)
         SettingsProvider.addEventListener("visualizationChange", () => this.forceUpdate())
         ScreenSizeTracker.addEventListener("onBoundaryPass", ({detail}) => this.setState({isSmall: detail.isSmall}))
+    }
+
+    componentDidUpdate(){
+        this.state.shouldRemount = false
     }
 
     render(){
@@ -131,7 +139,8 @@ export default class App extends React.Component{
                             columns: this.state.columns,
                             rows: this.state.rows,
                             ref: this.grid,
-                            onRequestPath: this.handleRequestPath
+                            onRequestPath: this.handleRequestPath,
+                            key: this.state.shouldRemount ? ++this.remountKey : this.remountKey
                         }) : null}
                     </div>
                 </main>

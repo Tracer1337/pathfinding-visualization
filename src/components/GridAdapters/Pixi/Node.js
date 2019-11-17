@@ -27,13 +27,19 @@ export default class Node extends Emitter{
 
         this.graphics.interactive = true
         this.graphics.hitArea = new PIXI.RoundedRectangle(this.x, this.y, size, size, size*0.15)
-        this.graphics.on("mouseover", () => this.dispatchEvent(new CustomEvent("mouseover")))
-        this.graphics.on("mousedown", () => this.dispatchEvent(new CustomEvent("mousedown")))
+        this.graphics.on("mouseover", () => this.dispatchEvent(new CustomEvent("mouseover", {detail: this.index})))
+        this.graphics.on("mousedown", () => this.dispatchEvent(new CustomEvent("mousedown", {detail: this.index})))
     }
 
     setState = state => {
         this.state = state
         this.graphics.tint = PIXI.utils.string2hex(BACKGROUNDS[state][1])
+
+        if(this.state === STATES.START || this.state === STATES.END){
+            this.graphics.buttonMode = true
+        }else if(this.graphics.buttonMode){
+            this.graphics.buttonMode = false
+        }
     }
 
     set = state => {

@@ -33,10 +33,6 @@ export default class Node extends React.Component{
 
     getState = () => this.state.state
 
-    componentDidMount(){
-        SettingsProvider.addEventListener("nodeSizeChange", () => this.forceUpdate())
-    }
-
     componentWillUnmount(){
         if(this.timeout){
             clearTimeout(this.timeout)

@@ -74,11 +74,16 @@
 
     "nodeSize": {
         "type": "number",
-        "value": 50,
+        "value": 30,
         "min": 10,
         "max": 150,
         "step": 10,
         "label": "Node Size"
+    },
+
+    "applyNodeSize": {
+        "type": "action",
+        "label": "Apply Node Size"
     },
 
     "label3DOnly": {
