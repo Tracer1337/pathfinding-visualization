@@ -1,14 +1,17 @@
 {
     "visualization": {
         "type": "select",
-        "label": "Visualization",
-        "value": 0,
+        "label": "Renderer",
+        "value": 1,
         "options": [{
-            "label": "Basic",
+            "label": "React (Slow)",
             "value": 0
         },{
-            "label": "3D",
+            "label": "Pixi (Fast)",
             "value": 1
+        },{
+            "label": "THREE (Slow)",
+            "value": 2
         }]
     },
 

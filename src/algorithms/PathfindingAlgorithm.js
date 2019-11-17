@@ -1,5 +1,4 @@
 import Emitter from "../utils/Emitter.js"
-import SettingsProvider from "../utils/SettingsProvider.js"
 import {Directions, Heuristics} from "../config/constants.js"
 
 class Node{
@@ -33,7 +32,7 @@ export default class PathfindingAlgorithm extends Emitter{
         this.grid = grid
 
         this.instant = instant
-        
+
         this.setHeuristic(0)
         this.setDirections(0)
         this.startNode.setDistance(0)

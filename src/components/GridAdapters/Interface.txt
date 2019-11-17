@@ -1,0 +1,7 @@
+Node
+    Methods
+        force <STATE> -> void
+        toggle <STATE> -> void
+        set <STATE> -> void
+        reset <> -> void
+        getState <> -> STATE

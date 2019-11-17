@@ -43,13 +43,13 @@ export default class Alert extends React.Component{
                     className={"alert "+this.state.variant}
                     message={
                         <span className="message">
-                            <img className="icon" src={ErrorIcon}/>
+                            <img className="icon" src={ErrorIcon} alt="Error"/>
                             {this.state.message}
                         </span>
                     }
                     action={
                         <IconButton onClick={this.handleClose}>
-                            <img className="close" src={CloseIcon}/>
+                            <img className="close" src={CloseIcon} alt="Close"/>
                         </IconButton>
                     }
                     onClose={this.handleClose}

@@ -5,7 +5,7 @@ import Node from "./Node.js"
 import SettingsProvider from "../../../utils/SettingsProvider.js"
 import {DEBUG_MODE} from "../../../config/constants.js"
 
-export default class BasicAdapter extends Grid{
+export default class ReactAdapter extends Grid{
     nodes = []
 
     componentDidUpdate(){

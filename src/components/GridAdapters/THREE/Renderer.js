@@ -107,8 +107,8 @@ export default class Renderer{
         this.renderer = null
         this.scene = null
         this.clock = null
-        for(let object of this.objects){
-            object = null
+        for(let i = 0; i < this.objects.length; i++){
+            delete this.objects[i]
         }
     }
 

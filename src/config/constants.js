@@ -28,7 +28,7 @@ const Color = c => ["Color", c]
 const Image = (c, img) => ["Image", c, img]
 
 export const BACKGROUNDS = {
-    [STATES.WALKABLE]: Color("white"),
+    [STATES.WALKABLE]: Color("#ffffff"),
     [STATES.BLOCKED]: Color("#2c3e50"),
     [STATES.START]: Image("#2ecc71", Arrow),
     [STATES.END]: Image("#2ecc71", Cross),
