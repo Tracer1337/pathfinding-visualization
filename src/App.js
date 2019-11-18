@@ -3,7 +3,7 @@ import React from "react"
 import SettingsProvider from "./utils/SettingsProvider.js"
 import ScreenSizeTracker from "./utils/ScreenSizeTracker.js"
 import sleep from "./utils/sleep.js"
-import {STATES} from "./config/constants.js"
+import {STATES, ANIMATION_OFFSET} from "./config/constants.js"
 import algorithms from "./algorithms"
 
 import Sidebar from "./components/Sidebar.js"
@@ -12,6 +12,8 @@ import Grid from "./components/Grid.js"
 import GridAdapters from "./components/GridAdapters"
 import Alert from "./components/Alert.js"
 import FloatingActionButtons from "./components/FloatingActionButtons.js"
+
+document.documentElement.style.setProperty("--animation-factor", 1 + ANIMATION_OFFSET / SettingsProvider.settings.nodeSize.value)
 
 export default class App extends React.Component{
     state = {isSmall: ScreenSizeTracker.isSmall}

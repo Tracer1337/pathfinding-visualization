@@ -69,7 +69,7 @@ export default class Node{
             this.totalAnimationTime = 0
         }
         const factor = Math.sin(scale(this.totalAnimationTime, 0, SettingsProvider.settings.animationDuration.value, 0, Math.PI))
-        this.box.position.y = this.y+ANIMATION_OFFSET*factor
+        this.box.position.y = this.y+ANIMATION_OFFSET*2*factor
     }
 
     toggle = (state) => {

@@ -8,7 +8,7 @@ export const TITLE = "Pathfinding Visualization"
 
 export const NODE_BORDER_WIDTH = 1
 export const MAX_WIDTH_FOR_LAYOUT_CHANGE = 700
-export const ANIMATION_OFFSET = SettingsProvider.settings.nodeSize.value*.5
+export const ANIMATION_OFFSET = SettingsProvider.settings.nodeSize.value*.25
 
 export const ROWS_CONSTRAINT = 100
 export const COLUMNS_CONSTRAINT = 100

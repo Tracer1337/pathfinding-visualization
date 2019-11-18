@@ -11,7 +11,7 @@ export default class PixiAdapter extends Grid{
     dragStartIndex = -1
 
     renderGrid = () => {
-        this.gridRenderer = new GridRenderer(this.props.columns, this.props.rows, this.app.renderer)
+        this.gridRenderer = new GridRenderer(this.props.columns, this.props.rows, this.app)
         this.nodes = this.gridRenderer.getNodes()
         this.nodes.forEach(node => {
             node.addEventListener("mouseover", this.handleMouseOver)

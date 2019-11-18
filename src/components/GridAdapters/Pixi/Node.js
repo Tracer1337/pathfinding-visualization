@@ -1,22 +1,25 @@
 import * as PIXI from "pixi.js"
 
-import {STATES, BACKGROUNDS} from "../../../config/constants.js"
+import {STATES, BACKGROUNDS, ANIMATION_OFFSET} from "../../../config/constants.js"
 import SettingsProvider from "../../../utils/SettingsProvider.js"
 import Emitter from "../../../utils/Emitter.js"
+import scale from "../../../utils/scale.js"
 
 export default class Node extends Emitter{
-    constructor(x, y, index, renderer){
+    constructor(x, y, index, app){
         super()
         const size = SettingsProvider.settings.nodeSize.value
 
         this.state = STATES.WALKABLE
         this.hasBasicTexture = true
+        this.totalAnimationTime = 0
 
         this.x = x * size
         this.y = y * size
         this.index = index
 
-        this.renderer = renderer
+        this.ticker = app.ticker
+        this.renderer = app.renderer
 
         this.createSprite()
     }
@@ -35,14 +38,31 @@ export default class Node extends Emitter{
     createSprite = () => {
         const size = SettingsProvider.settings.nodeSize.value
         this.sprite = new PIXI.Sprite(this.createTexture())
-        this.sprite.x = this.x
-        this.sprite.y = this.y
+        this.sprite.x = this.x + size / 2
+        this.sprite.y = this.y + size / 2
         this.sprite.width = size
         this.sprite.height = size
+
+        this.sprite.anchor.set(.5, .5)
 
         this.sprite.interactive = true
         this.sprite.on("pointerover", () => this.dispatchEvent(new CustomEvent("mouseover", {detail: this.index})))
         this.sprite.on("pointerdown", () => this.dispatchEvent(new CustomEvent("mousedown", {detail: this.index})))
+    }
+
+    handleTicker = delta => {
+        const size = SettingsProvider.settings.nodeSize.value
+        if(this.totalAnimationTime >= SettingsProvider.settings.animationDuration.value){
+            this.sprite.width = size
+            this.sprite.height = size
+            this.ticker.remove(this.handleTicker)
+            this.totalAnimationTime = 0
+            return
+        }
+        this.totalAnimationTime += this.ticker.deltaMS/1000
+        const scaling = Math.sin(scale(this.totalAnimationTime, 0, SettingsProvider.settings.animationDuration.value, 0, Math.PI))
+        this.sprite.width = size+ANIMATION_OFFSET*scaling
+        this.sprite.height = size+ANIMATION_OFFSET*scaling
     }
 
     getSprite = () => this.sprite
@@ -50,6 +70,11 @@ export default class Node extends Emitter{
     setState = state => {
         this.state = state
         this.sprite.tint = PIXI.utils.string2hex(BACKGROUNDS[state][1])
+
+        // Start animation if the new state is not "walkable"
+        if(state !== STATES.WALKABLE){
+            this.ticker.add(this.handleTicker)
+        }
 
         // Add / Remove image from sprite if it should have / has one
         if(BACKGROUNDS[this.state][0] === "Image"){

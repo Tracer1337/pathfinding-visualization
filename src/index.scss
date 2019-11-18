@@ -50,7 +50,7 @@ body{
                             animation: node 200ms ease-in-out;
 
                             @keyframes node{
-                                50%{transform: scale(1.1)}
+                                50%{transform: scale(var(--animation-factor))}
                                 100%{transform: scale(1)}
                             }
                         }

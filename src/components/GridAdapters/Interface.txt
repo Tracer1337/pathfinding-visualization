@@ -5,3 +5,6 @@ Node
         set <STATE> -> void
         reset <> -> void
         getState <> -> STATE
+    Events
+        onMouseEnter <int: index>
+        onMouseDown <int: index>

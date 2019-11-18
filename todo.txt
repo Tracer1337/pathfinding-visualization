@@ -6,8 +6,4 @@ tutorial
 
 More algorithms
 
-Make buttons in mobile view more accessible
-
 Better pixi.js cleanup
-
-Do not allow cross corner movements
