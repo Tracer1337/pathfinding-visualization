@@ -13,6 +13,8 @@ import GridAdapters from "./components/GridAdapters"
 import Alert from "./components/Alert.js"
 import FloatingActionButtons from "./components/FloatingActionButtons.js"
 
+import RecursiveDivision from "./algorithms/maze-generation/RecursiveDivision.js"
+
 document.documentElement.style.setProperty("--animation-factor", 1 + ANIMATION_OFFSET / SettingsProvider.settings.nodeSize.value)
 
 export default class App extends React.Component{
@@ -67,6 +69,12 @@ export default class App extends React.Component{
         })
     }
 
+    generateMaze = () => {
+        const mazeGenerator = new RecursiveDivision(this.grid.current.grid)
+        this.grid.current.clearGrid()
+        this.grid.current.setGrid(mazeGenerator.generateMaze())
+    }
+
     handleRequestPath = () => {
         this.calculatePath(true)
     }
@@ -93,6 +101,7 @@ export default class App extends React.Component{
         SettingsProvider.addEventListener("applyNodeSize", this.resetNodeSize)
         SettingsProvider.addEventListener("searchPath", () => this.calculatePath())
         SettingsProvider.addEventListener("visualizationChange", () => this.forceUpdate())
+        SettingsProvider.addEventListener("generateMaze", this.generateMaze)
         ScreenSizeTracker.addEventListener("onBoundaryPass", ({detail}) => this.setState({isSmall: detail.isSmall}))
     }
 

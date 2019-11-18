@@ -124,5 +124,10 @@
         "label": "Search Path",
         "icon": "play_arrow-24px.svg",
         "fabAvailable": true
+    },
+
+    "generateMaze": {
+        "type": "action",
+        "label": "Generate Maze"
     }
 }

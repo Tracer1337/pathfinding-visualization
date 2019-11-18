@@ -233,6 +233,20 @@ export default class Grid extends React.Component{
         }
     }
 
+    /*
+    * Set new grid and update nodes accordingly
+    */
+    setGrid = grid => {
+        this.grid = grid
+        this.grid.forEach((column, y) => column.forEach((cell, x) => {
+            const index = this.coordsToIndex({x,y})
+            this.nodes[index].set(cell)
+        }))
+    }
+
+    /*
+    * Initialize grid
+    */
     init(){
         const handleMouseDown = () => this.isMouseDown = true
         document.addEventListener("mousedown", handleMouseDown, true)
