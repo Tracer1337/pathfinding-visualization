@@ -14,6 +14,17 @@ export default class InputHandler{
         this.domElement.addEventListener("mousedown", this.handleMouseDown)
         this.domElement.addEventListener("mouseup", this.handleMouseUp)
 
+        const callAsMouseEvent = (e, callback) => {
+            const domElementRect = this.domElement.getBoundingClientRect()
+            callback({
+                offsetX: e.touches[0].clientX - domElementRect.x,
+                offsetY: e.touches[0].clientY - domElementRect.y
+            })
+        }
+        this.domElement.addEventListener("touchmove", e => callAsMouseEvent(e, this.handleMouseMove))
+        this.domElement.addEventListener("touchstart", e => callAsMouseEvent(e, this.handleMouseDown))
+        this.domElement.addEventListener("touchend", this.handleMouseUp)
+
         this.listeners = {}
         for(let event in InputHandler.EVENTS)
             this.listeners[InputHandler.EVENTS[event]] = []
@@ -26,9 +37,7 @@ export default class InputHandler{
     emit = (eventName, data) => this.listeners[eventName].forEach(callback => callback(data))
 
     handleMouseMove = e => {
-        this.mouse.x = (e.offsetX/this.domElement.clientWidth)*2-1
-        this.mouse.y = (e.offsetY/this.domElement.clientHeight)*-2+1
-        this.raycaster.setFromCamera(this.mouse, this.camera)
+        this.setMouse(e.offsetX, e.offsetY)
 
         const intersection = this.getIntersections(this.objects)[0]
         if(intersection && intersection.object.isNode && this.currentObject.uuid !== intersection.object.uuid){
@@ -38,12 +47,21 @@ export default class InputHandler{
     }
 
     handleMouseDown = e => {
+        if(e.offsetX && e.offsetY){
+            this.setMouse(e.offsetX, e.offsetY)
+        }
         const intersection = this.getIntersections(this.objects)[0]
         if(intersection && intersection.object.isNode)
             this.emit(InputHandler.EVENTS.CLICK, intersection.object.index)
     }
 
     handleMouseUp = () => this.emit(InputHandler.EVENTS.MOUSE_UP)
+
+    setMouse = (x, y) => {
+        this.mouse.x = (x/this.domElement.clientWidth)*2-1
+        this.mouse.y = (y/this.domElement.clientHeight)*-2+1
+        this.raycaster.setFromCamera(this.mouse, this.camera)
+    }
 
     getIntersections = objects => this.raycaster.intersectObjects(objects)
 

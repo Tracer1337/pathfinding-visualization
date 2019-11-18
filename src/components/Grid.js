@@ -262,6 +262,7 @@ export default class Grid extends React.Component{
         }
         document.addEventListener("mouseup", handleMouseUp)
         document.addEventListener("touchend", handleMouseUp)
+        document.addEventListener("touchcancel", handleMouseUp)
 
         SettingsProvider.addEventListener("clearGrid", this.clearGrid)
 
