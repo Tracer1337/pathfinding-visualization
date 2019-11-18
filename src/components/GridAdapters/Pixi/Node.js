@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js"
 
-import {STATES, BACKGROUNDS, ANIMATION_OFFSET} from "../../../config/constants.js"
+import {STATES, BACKGROUNDS, ANIMATION_OFFSET, DEBUG_MODE} from "../../../config/constants.js"
 import SettingsProvider from "../../../utils/SettingsProvider.js"
 import Emitter from "../../../utils/Emitter.js"
 import scale from "../../../utils/scale.js"
@@ -35,6 +35,19 @@ export default class Node extends Emitter{
         return this.renderer.generateTexture(this.graphics)
     }
 
+    createText = () => {
+        const size = SettingsProvider.settings.nodeSize.value
+        const x = Math.floor(this.x/size)
+        const y = Math.floor(this.y/size)
+        const text = new PIXI.Text(`(${x};${y})\n${this.index}`, {
+            fontSize: 14,
+            align: "center",
+            cacheAsBitmap: true,
+        })
+        text.anchor.set(.5, .5)
+        return text
+    }
+
     createSprite = () => {
         const size = SettingsProvider.settings.nodeSize.value
         this.sprite = new PIXI.Sprite(this.createTexture())
@@ -42,6 +55,10 @@ export default class Node extends Emitter{
         this.sprite.y = this.y + size / 2
         this.sprite.width = size
         this.sprite.height = size
+
+        if(DEBUG_MODE){
+            this.sprite.addChild(this.createText())
+        }
 
         this.sprite.anchor.set(.5, .5)
 
