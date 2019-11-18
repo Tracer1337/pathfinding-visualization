@@ -77,7 +77,13 @@ export default class PathfindingAlgorithm extends Emitter{
                continue
 
             // Do not proceed if the node is not walkable
-            if(this.grid[y][x] === 1)
+            if(
+                this.grid[y][x] === 1 ||
+                (
+                    this.grid[currentNode.y][currentNode.x+(x-currentNode.x)] === 1 &&
+                    this.grid[currentNode.y+(y-currentNode.y)][currentNode.x] === 1
+                )
+            )
                 continue
 
             const newNode = new Node(x, y, currentNode)
