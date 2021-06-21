@@ -20,7 +20,7 @@ export default class FloatingActionButtons extends React.Component{
                                 key={index}
                                 onClick={() => SettingsProvider.invoke(key)}
                             >
-                                <img src={iconSource}/>
+                                <img src={iconSource} alt="" />
                             </Fab>
                         )
                     })
