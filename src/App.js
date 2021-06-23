@@ -70,8 +70,8 @@ export default class App extends React.Component{
     }
 
     generateMaze = () => {
-        const mazeGenerator = new RecursiveDivision(this.grid.current.grid)
         this.grid.current.clearGrid()
+        const mazeGenerator = new RecursiveDivision(this.grid.current.grid)
         this.grid.current.setGrid(mazeGenerator.generateMaze())
     }
 
